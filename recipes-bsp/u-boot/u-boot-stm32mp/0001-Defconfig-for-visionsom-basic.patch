@@ -4,8 +4,8 @@ Date: Mon, 18 Nov 2019 12:11:49 +0100
 Subject: [PATCH] Defconfig for visionsom basic
 
 ---
- configs/stm32mp15_visionsom_basic_defconfig | 120 ++++++++++++++++++++
- 1 file changed, 120 insertions(+)
+ configs/stm32mp15_visionsom_basic_defconfig | 119 ++++++++++++++++++++
+ 1 file changed, 119 insertions(+)
  create mode 100644 configs/stm32mp15_visionsom_basic_defconfig
 
 diff --git a/configs/stm32mp15_visionsom_basic_defconfig b/configs/stm32mp15_visionsom_basic_defconfig
@@ -13,7 +13,7 @@ new file mode 100644
 index 0000000..b751c3c
 --- /dev/null
 +++ b/configs/stm32mp15_visionsom_basic_defconfig
-@@ -0,0 +1,120 @@
+@@ -0,0 +1,119 @@
 +CONFIG_ARM=y
 +CONFIG_ARCH_STM32MP=y
 +CONFIG_SYS_MALLOC_F_LEN=0x3000
@@ -125,8 +125,7 @@ index 0000000..b751c3c
 +CONFIG_USB_GADGET_DWC2_OTG=y
 +CONFIG_DM_VIDEO=y
 +CONFIG_BACKLIGHT_GPIO=y
-+CONFIG_VIDEO_LCD_ORISETECH_OTM8009A=y
-+CONFIG_VIDEO_LCD_RAYDIUM_RM68200=y
++CONFIG_VIDEO_LCD_ILITEK_ILI9881C=y
 +CONFIG_VIDEO_STM32=y
 +CONFIG_VIDEO_STM32_DSI=y
 +CONFIG_VIDEO_STM32_MAX_XRES=1280
