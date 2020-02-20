@@ -33,6 +33,15 @@ cd tmp-glibc/deploy/images/stm32mp157a-visionsom-mx/scripts/
 
 The system image is located in the flashlayout_st-image-weston_FlashLayout_sdcard_stm32mp157a-visionsom-mx-basic.raw file in the tmp-glibc/deploy/images/stm32mp157a-visionsom-mx directory.
 
+The base image supports the RGB display interface. In order to build the image with the DSI support, the following configuration needs to be used:
+
+```shell
+DISTRO=openstlinux-weston MACHINE=stm32mp157a-visionsom-mx-dsi source layers/meta-st/scripts/envsetup.sh
+bitbake st-image-weston
+cd tmp-glibc/deploy/images/stm32mp157a-visionsom-mx-dsi/scripts/
+./create_sdcard_from_flashlayout.sh ../flashlayout_st-image-weston/FlashLayout_sdcard_stm32mp157a-visionsom-mx-dsi-basic.tsv
+```
+
 ## Building the SDK
 
 The SDK for the host system can be build by calling the bitbake command:
