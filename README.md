@@ -18,9 +18,9 @@ The summary of required steps is shown below:
 
 ```shell
 cd <working directory path>/Distribution-Package
-mkdir openstlinux-4.19-thud-mp1-19-10-09 
-cd openstlinux-4.19-thud-mp1-19-10-09
-repo init -u https://github.com/STMicroelectronics/oe-manifest.git -b refs/tags/openstlinux-4.19-thud-mp1-19-10-09
+mkdir openstlinux-4.19-thud-mp1-20-02-19
+cd openstlinux-4.19-thud-mp1-20-02-19
+repo init -u https://github.com/STMicroelectronics/oe-manifest.git -b refs/tags/openstlinux-20-02-19
 repo sync
 cd layers/meta-st
 git clone https://github.com/SoMLabs/openst-meta-somlabs.git meta-somlabs
