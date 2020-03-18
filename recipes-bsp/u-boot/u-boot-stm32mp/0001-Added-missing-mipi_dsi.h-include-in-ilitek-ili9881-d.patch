@@ -1,0 +1,21 @@
+From 36b30d4d62f8aaa884e8864caf28b26d440fd825 Mon Sep 17 00:00:00 2001
+From: Krzysztof Chojnowski <krzysiek@embedev.pl>
+Date: Tue, 17 Mar 2020 21:25:01 +0100
+Subject: [PATCH] Added missing mipi_dsi.h include in ilitek-ili9881 driver
+
+---
+ drivers/video/ilitek-ili9881c.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/video/ilitek-ili9881c.c b/drivers/video/ilitek-ili9881c.c
+index f12d0c6..af63009 100644
+--- a/drivers/video/ilitek-ili9881c.c
++++ b/drivers/video/ilitek-ili9881c.c
+@@ -4,6 +4,7 @@
+ #include <backlight.h>
+ #include <dm.h>
+ #include <mipi_display.h>
++#include <mipi_dsi.h>
+ #include <panel.h>
+ #include <asm/gpio.h>
+ #include <power/regulator.h>
