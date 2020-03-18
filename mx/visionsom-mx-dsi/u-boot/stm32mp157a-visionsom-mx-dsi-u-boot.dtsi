@@ -23,6 +23,8 @@
 	aliases {
 		serial0 = &uart4;
 		mmc0 = &sdmmc1;
+		mmc1 = &sdmmc2;
+
 	};
 
 	chosen {
@@ -173,6 +175,13 @@
 
 	/* USER CODE BEGIN sdmmc1 */
 	/* USER CODE END sdmmc1 */
+};
+
+&sdmmc2{
+	u-boot,dm-pre-reloc;
+
+	/* USER CODE BEGIN sdmmc2 */
+	/* USER CODE END sdmmc2 */
 };
 
 &uart4{
