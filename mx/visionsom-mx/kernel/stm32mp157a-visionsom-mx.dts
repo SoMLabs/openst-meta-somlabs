@@ -36,6 +36,12 @@
 		ranges;
 
 		/* USER CODE BEGIN reserved-memory */
+
+                fb_reserved: fb@fd000000 {
+                        reg = <0xfd000000 0x8000000>;
+                        no-map;
+                };
+
 		/* USER CODE END reserved-memory */
 
 		gpu_reserved: gpu@d4000000 {
