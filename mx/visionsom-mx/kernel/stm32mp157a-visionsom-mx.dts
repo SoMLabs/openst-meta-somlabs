@@ -55,9 +55,8 @@
 	aliases {
 		ethernet0 = &ethernet0;
 		serial0 = &uart4;
-		serial1 = &uart7;
-		serial2 = &uart8;
 		mmc0 = &sdmmc1;
+		mmc1 = &sdmmc2;
 	};
 
 	chosen {
@@ -90,10 +89,6 @@
 
 	panel {
 		compatible = "powertip,ph800480t013-ibc17", "simple-panel";
-
-		pinctrl-names = "default", "sleep";
-		pinctrl-0 = <&ltdc_pins_mx>;
-		pinctrl-1 = <&ltdc_sleep_pins_mx>;
 
 		port {
 			panel_in: endpoint {
@@ -373,14 +368,14 @@
 					 <STM32_PINMUX('B', 14, AF9)>, /* SDMMC2_D0 */
 					 <STM32_PINMUX('B', 15, AF9)>, /* SDMMC2_D1 */
 					 <STM32_PINMUX('G', 6, AF10)>; /* SDMMC2_CMD */
-			bias-disable;
+			bias-pull-up;
 			drive-push-pull;
 			slew-rate = <1>;
 		};
 		pins2 {
 			u-boot,dm-pre-reloc;
 			pinmux = <STM32_PINMUX('E', 3, AF9)>; /* SDMMC2_CK */
-			bias-disable;
+			bias-pull-up;
 			drive-push-pull;
 			slew-rate = <3>;
 		};
@@ -394,21 +389,21 @@
 					 <STM32_PINMUX('B', 4, AF9)>, /* SDMMC2_D3 */
 					 <STM32_PINMUX('B', 14, AF9)>, /* SDMMC2_D0 */
 					 <STM32_PINMUX('B', 15, AF9)>; /* SDMMC2_D1 */
-			bias-disable;
+			bias-pull-up;
 			drive-push-pull;
 			slew-rate = <1>;
 		};
 		pins2 {
 			u-boot,dm-pre-reloc;
 			pinmux = <STM32_PINMUX('E', 3, AF9)>; /* SDMMC2_CK */
-			bias-disable;
+			bias-pull-up;
 			drive-push-pull;
 			slew-rate = <3>;
 		};
 		pins3 {
 			u-boot,dm-pre-reloc;
 			pinmux = <STM32_PINMUX('G', 6, AF10)>; /* SDMMC2_CMD */
-			bias-disable;
+			bias-pull-up;
 			drive-open-drain;
 			slew-rate = <1>;
 		};
@@ -545,28 +540,15 @@
 		};
 	};
 
-	uart8_pins_mx: uart8_mx-0 {
-		u-boot,dm-pre-reloc;
-		pins1 {
-			u-boot,dm-pre-reloc;
-			pinmux = <STM32_PINMUX('E', 0, AF8)>; /* UART8_RX */
-			bias-disable;
-		};
-		pins2 {
-			u-boot,dm-pre-reloc;
-			pinmux = <STM32_PINMUX('E', 1, AF8)>; /* UART8_TX */
-			bias-disable;
-			drive-push-pull;
-			slew-rate = <0>;
+	usb_otg_hs_pins_mx: usb_otg_hs_mx-0 {
+		pins {
+			pinmux = <STM32_PINMUX('A', 10, ANALOG)>; /* USB_OTG_HS_ID */
 		};
 	};
 
-	uart8_sleep_pins_mx: uart8_sleep_mx-0 {
-		u-boot,dm-pre-reloc;
+	usb_otg_hs_sleep_pins_mx: usb_otg_hs_sleep_mx-0 {
 		pins {
-			u-boot,dm-pre-reloc;
-			pinmux = <STM32_PINMUX('E', 0, ANALOG)>, /* UART8_RX */
-					 <STM32_PINMUX('E', 1, ANALOG)>; /* UART8_TX */
+			pinmux = <STM32_PINMUX('A', 10, ANALOG)>; /* USB_OTG_HS_ID */
 		};
 	};
 
@@ -686,6 +668,9 @@
 };
 
 &ltdc{
+	pinctrl-names = "default", "sleep";
+	pinctrl-0 = <&ltdc_pins_mx>;
+	pinctrl-1 = <&ltdc_sleep_pins_mx>;
 	status = "okay";
 
 	/* USER CODE BEGIN ltdc */
@@ -774,7 +759,7 @@
         #address-cells = <1>;
         #size-cells = <0>;
 	keep-power-in-suspend;
-	
+
 	brcmf: bcrmf@1 {
 		reg = <1>;
 		compatible = "brcm,bcm4329-fmac";
@@ -841,17 +826,6 @@
 	/* USER CODE END uart7 */
 };
 
-&uart8{
-	u-boot,dm-pre-reloc;
-	pinctrl-names = "default", "sleep";
-	pinctrl-0 = <&uart8_pins_mx>;
-	pinctrl-1 = <&uart8_sleep_pins_mx>;
-	status = "okay";
-
-	/* USER CODE BEGIN uart8 */
-	/* USER CODE END uart8 */
-};
-
 &usbh_ehci{
 	status = "okay";
 
@@ -877,6 +851,9 @@
 };
 
 &usbotg_hs{
+	pinctrl-names = "default", "sleep";
+	pinctrl-0 = <&usb_otg_hs_pins_mx>;
+	pinctrl-1 = <&usb_otg_hs_sleep_pins_mx>;
 	status = "okay";
 
 	/* USER CODE BEGIN usbotg_hs */

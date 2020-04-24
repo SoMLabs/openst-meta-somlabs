@@ -14,6 +14,9 @@
 #include "stm32mp157c-m4-srm.dtsi"
 
 /* USER CODE BEGIN includes */
+
+#include <dt-bindings/rtc/rtc-stm32.h>
+
 /* USER CODE END includes */
 
 / {
@@ -33,6 +36,12 @@
 		ranges;
 
 		/* USER CODE BEGIN reserved-memory */
+
+                fb_reserved: fb@fd000000 {
+                        reg = <0xfd000000 0x8000000>;
+                        no-map;
+                };
+
 		/* USER CODE END reserved-memory */
 
 		gpu_reserved: gpu@d4000000 {
@@ -43,14 +52,11 @@
 
 	/* USER CODE BEGIN root */
 
-	vdd: regulator_vdd {
-		compatible = "regulator-fixed";
-		regulator-name = "vdd";
-		regulator-min-microvolt = <3300000>;
-		regulator-max-microvolt = <3300000>;
-		enable-active-high;
-		regulator-always-on;
-		regulator-initial-mode = <0>;
+	aliases {
+		ethernet0 = &ethernet0;
+		serial0 = &uart4;
+		mmc0 = &sdmmc1;
+		mmc1 = &sdmmc2;
 	};
 
 	backlight: backlight {
@@ -59,6 +65,34 @@
                 gpios = <&gpiod 15 GPIO_ACTIVE_LOW>;
                 status = "okay";
         };
+
+	chosen {
+		stdout-path = "serial0:115200n8";
+	};
+
+	led {
+		compatible = "gpio-leds";
+		led1 {
+			label = "led1";
+			gpios = <&gpioa 12 GPIO_ACTIVE_HIGH>;
+			linux,default-trigger = "heartbeat";
+		};
+
+		led3 {
+			label = "led3";
+			gpios = <&gpiog 12 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+		};
+	};
+
+	ledpwm {
+		compatible = "pwm-leds";
+		led2 {
+			label = "led2";
+			pwms = <&pwm1 3 500000 0>;
+			max-brightness = <127>;
+		};
+	};
 
 	panel {
 		status = "okay";
@@ -87,6 +121,41 @@
 			};
 
 		};
+	};
+
+	usb_phy_tuning: usb-phy-tuning {
+		st,hs-dc-level = <2>;
+		st,fs-rftime-tuning;
+		st,hs-rftime-reduction;
+		st,hs-current-trim = <15>;
+		st,hs-impedance-trim = <1>;
+		st,squelch-level = <3>;
+		st,hs-rx-offset = <2>;
+		st,no-lsfs-sc;
+	};
+
+	vbus_sw: regulator_vbus_sw {
+		compatible = "regulator-fixed";
+	        regulator-name = "usb_vbus";
+	        regulator-min-microvolt = <5000000>;
+	        regulator-max-microvolt = <5000000>;
+		gpio = <&gpiod 13 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+	};
+
+	vdd: regulator_vdd {
+		compatible = "regulator-fixed";
+		regulator-name = "vdd";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		enable-active-high;
+		regulator-always-on;
+		regulator-initial-mode = <0>;
+	};
+
+	wifi_pwrseq: wifi-pwrseq {
+		compatible = "mmc-pwrseq-simple";
+		reset-gpios = <&gpiof 9 GPIO_ACTIVE_LOW>;
 	};
 
 	/* USER CODE END root */
@@ -325,14 +394,14 @@
 					 <STM32_PINMUX('B', 14, AF9)>, /* SDMMC2_D0 */
 					 <STM32_PINMUX('B', 15, AF9)>, /* SDMMC2_D1 */
 					 <STM32_PINMUX('G', 6, AF10)>; /* SDMMC2_CMD */
-			bias-disable;
+			bias-pull-up;
 			drive-push-pull;
 			slew-rate = <1>;
 		};
 		pins2 {
 			u-boot,dm-pre-reloc;
 			pinmux = <STM32_PINMUX('E', 3, AF9)>; /* SDMMC2_CK */
-			bias-disable;
+			bias-pull-up;
 			drive-push-pull;
 			slew-rate = <3>;
 		};
@@ -346,21 +415,21 @@
 					 <STM32_PINMUX('B', 4, AF9)>, /* SDMMC2_D3 */
 					 <STM32_PINMUX('B', 14, AF9)>, /* SDMMC2_D0 */
 					 <STM32_PINMUX('B', 15, AF9)>; /* SDMMC2_D1 */
-			bias-disable;
+			bias-pull-up;
 			drive-push-pull;
 			slew-rate = <1>;
 		};
 		pins2 {
 			u-boot,dm-pre-reloc;
 			pinmux = <STM32_PINMUX('E', 3, AF9)>; /* SDMMC2_CK */
-			bias-disable;
+			bias-pull-up;
 			drive-push-pull;
 			slew-rate = <3>;
 		};
 		pins3 {
 			u-boot,dm-pre-reloc;
 			pinmux = <STM32_PINMUX('G', 6, AF10)>; /* SDMMC2_CMD */
-			bias-disable;
+			bias-pull-up;
 			drive-open-drain;
 			slew-rate = <1>;
 		};
@@ -497,32 +566,29 @@
 		};
 	};
 
-	uart8_pins_mx: uart8_mx-0 {
-		u-boot,dm-pre-reloc;
-		pins1 {
-			u-boot,dm-pre-reloc;
-			pinmux = <STM32_PINMUX('E', 0, AF8)>; /* UART8_RX */
-			bias-disable;
+	usb_otg_hs_pins_mx: usb_otg_hs_mx-0 {
+		pins {
+			pinmux = <STM32_PINMUX('A', 10, ANALOG)>; /* USB_OTG_HS_ID */
 		};
-		pins2 {
-			u-boot,dm-pre-reloc;
-			pinmux = <STM32_PINMUX('E', 1, AF8)>; /* UART8_TX */
+	};
+
+	usb_otg_hs_sleep_pins_mx: usb_otg_hs_sleep_mx-0 {
+		pins {
+			pinmux = <STM32_PINMUX('A', 10, ANALOG)>; /* USB_OTG_HS_ID */
+		};
+	};
+
+	/* USER CODE BEGIN pinctrl */
+
+	pinctrl_edt_ft5x06_mx: pinctrl_edt_ft5x06_mx-0 {
+		pins {
+			pinmux = <STM32_PINMUX('A', 14, GPIO)>;
 			bias-disable;
 			drive-push-pull;
 			slew-rate = <0>;
 		};
 	};
 
-	uart8_sleep_pins_mx: uart8_sleep_mx-0 {
-		u-boot,dm-pre-reloc;
-		pins {
-			u-boot,dm-pre-reloc;
-			pinmux = <STM32_PINMUX('E', 0, ANALOG)>, /* UART8_RX */
-					 <STM32_PINMUX('E', 1, ANALOG)>; /* UART8_TX */
-		};
-	};
-
-	/* USER CODE BEGIN pinctrl */
 	/* USER CODE END pinctrl */
 };
 
@@ -555,6 +621,35 @@
 	status = "okay";
 
 	/* USER CODE BEGIN ethernet0 */
+
+	phy-mode = "rmii";
+	max-speed = <100>;
+	phy-handle = <&phy1>;
+	st,eth_ref_clk_sel = <1>;
+	clock-names = "stmmaceth",
+		"mac-clk-tx",
+		"mac-clk-rx",
+		"eth-ck",
+		"syscfg-clk",
+		"ethstp";
+	clocks = <&rcc ETHMAC>,
+		<&rcc ETHTX>,
+		<&rcc ETHRX>,
+		<&rcc ETHCK_K>,
+		<&rcc SYSCFG>,
+		<&rcc ETHSTP>;
+
+	mdio0 {
+		#address-cells = <1>;
+		#size-cells = <0>;
+		compatible = "snps,dwmac-mdio";
+		phy1: ethernet-phy@1 {
+			reg = <1>;
+			clocks = <&rcc ETHCK_K>;
+			clock-names = "rmii-ref";
+		};
+	};
+
 	/* USER CODE END ethernet0 */
 };
 
@@ -579,6 +674,22 @@
 	status = "okay";
 
 	/* USER CODE BEGIN i2c4 */
+
+	polytouch: edt-ft5x06@38 {
+		compatible = "edt,edt-ft5406", "edt,edt-ft5x06";
+		reg = <0x38>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_edt_ft5x06_mx>;
+		interrupt-parent = <&gpioa>;
+		interrupts = <14 IRQ_TYPE_EDGE_FALLING>;
+		reset-gpios = <&gpioa 1 GPIO_ACTIVE_LOW>;
+
+		touchscreen-size-x = <800>;
+		touchscreen-size-y = <480>;
+		touchscreen-inverted-x;
+		touchscreen-inverted-y;
+	};
+
 	/* USER CODE END i2c4 */
 };
 
@@ -610,6 +721,9 @@
 	status = "okay";
 
 	/* USER CODE BEGIN rtc */
+
+	st,lsco = <RTC_OUT1>;
+
 	/* USER CODE END rtc */
 };
 
@@ -622,6 +736,12 @@
 	status = "okay";
 
 	/* USER CODE BEGIN sdmmc1 */
+
+	broken-cd;
+	st,neg-edge;
+	bus-width = <4>;
+	vmmc-supply = <&vdd>;
+
 	/* USER CODE END sdmmc1 */
 };
 
@@ -634,6 +754,12 @@
 	status = "okay";
 
 	/* USER CODE BEGIN sdmmc2 */
+
+	broken-cd;
+	st,neg-edge;
+	bus-width = <4>;
+	vmmc-supply = <&vdd>;
+
 	/* USER CODE END sdmmc2 */
 };
 
@@ -645,6 +771,22 @@
 	status = "okay";
 
 	/* USER CODE BEGIN sdmmc3 */
+
+	arm,primecell-periphid = <0x10153180>;
+	non-removable;
+	st,neg-edge;
+	bus-width = <4>;
+	vmmc-supply = <&vdd>;
+	mmc-pwrseq = <&wifi_pwrseq>;
+        #address-cells = <1>;
+        #size-cells = <0>;
+	keep-power-in-suspend;
+
+	brcmf: bcrmf@1 {
+		reg = <1>;
+		compatible = "brcm,bcm4329-fmac";
+	};
+
 	/* USER CODE END sdmmc3 */
 };
 
@@ -659,9 +801,13 @@
 	status = "okay";
 
 	/* USER CODE BEGIN timers1 */
+
+	/delete-property/dmas;
+	/delete-property/dma-names;
+
 	/* USER CODE END timers1 */
 
-	pwm{
+	pwm1: pwm{
 		pinctrl-names = "default", "sleep";
 		pinctrl-0 = <&tim1_pwm_pins_mx>;
 		pinctrl-1 = <&tim1_pwm_sleep_pins_mx>;
@@ -690,18 +836,86 @@
 	status = "okay";
 
 	/* USER CODE BEGIN uart7 */
+
+	u-boot,dm-pre-reloc;
+	st,hw-flow-ctrl;
+	bluetooth {
+		shutdown-gpios = <&gpioe 9 GPIO_ACTIVE_HIGH>;
+		compatible = "brcm,bcm43438-bt";
+		max-speed = <3000000>;
+	};
+
 	/* USER CODE END uart7 */
 };
 
-&uart8{
-	u-boot,dm-pre-reloc;
-	pinctrl-names = "default", "sleep";
-	pinctrl-0 = <&uart8_pins_mx>;
-	pinctrl-1 = <&uart8_sleep_pins_mx>;
+&usbh_ehci{
 	status = "okay";
 
-	/* USER CODE BEGIN uart8 */
-	/* USER CODE END uart8 */
+	/* USER CODE BEGIN usbh_ehci */
+
+	phys = <&usbphyc_port0>;
+	phy-names = "usb";
+	vbus-supply = <&vbus_sw>;
+
+	/* USER CODE END usbh_ehci */
+};
+
+&usbh_ohci{
+	status = "okay";
+
+	/* USER CODE BEGIN usbh_ohci */
+
+	phys = <&usbphyc_port0>;
+	phy-names = "usb";
+	vbus-supply = <&vbus_sw>;
+
+	/* USER CODE END usbh_ohci */
+};
+
+&usbotg_hs{
+	pinctrl-names = "default", "sleep";
+	pinctrl-0 = <&usb_otg_hs_pins_mx>;
+	pinctrl-1 = <&usb_otg_hs_sleep_pins_mx>;
+	status = "okay";
+
+	/* USER CODE BEGIN usbotg_hs */
+
+	dr_mode = "peripheral";
+	force-b-session-valid;
+	phys = <&usbphyc_port1 0>;
+	phy-names = "usb2-phy";
+
+	/* USER CODE END usbotg_hs */
+};
+
+&usbphyc{
+	status = "okay";
+
+	/* USER CODE BEGIN usbphyc */
+
+	vdd3v3-supply = <&vdd>;
+
+	/* USER CODE END usbphyc */
+};
+
+&usbphyc_port0{
+	status = "okay";
+
+	/* USER CODE BEGIN usbphyc_port0 */
+
+	st,phy-tuning = <&usb_phy_tuning>;
+
+	/* USER CODE END usbphyc_port0 */
+};
+
+&usbphyc_port1{
+	status = "okay";
+
+	/* USER CODE BEGIN usbphyc_port1 */
+
+	st,phy-tuning = <&usb_phy_tuning>;
+
+	/* USER CODE END usbphyc_port1 */
 };
 
 /* USER CODE BEGIN addons */

@@ -153,7 +153,7 @@
 		u-boot,dm-pre-reloc;
 	};
 	pll4:st,pll@3 {
-		cfg = < 3 98 5 7 1 PQR(1,1,0) >;
+		cfg = < 3 98 5 7 5 PQR(1,1,0) >;
 		u-boot,dm-pre-reloc;
 	};
 };
@@ -184,13 +184,6 @@
 
 	/* USER CODE BEGIN uart4 */
 	/* USER CODE END uart4 */
-};
-
-&uart8{
-	u-boot,dm-pre-reloc;
-
-	/* USER CODE BEGIN uart8 */
-	/* USER CODE END uart8 */
 };
 
 /* USER CODE BEGIN addons */
