@@ -1,31 +1,33 @@
-From 924fe87c7af063425bff1883cca350fc67447272 Mon Sep 17 00:00:00 2001
+From d58699e43f977e7dda6630c05e6f37572e288525 Mon Sep 17 00:00:00 2001
 From: Krzysztof Chojnowski <krzysiek@embedev.pl>
-Date: Mon, 18 Nov 2019 11:16:23 +0100
-Subject: [PATCH] Add support for VisionSOM-STM32MP1 board.
+Date: Wed, 1 Jul 2020 12:07:26 +0200
+Subject: [PATCH] Add support for VisionSOM-STM32MP1 board
 
 ---
- arch/arm/boot/dts/Makefile           |  1 +
- drivers/gpu/drm/panel/panel-simple.c | 28 ++++++++++++++++++++++++++++
- 2 files changed, 29 insertions(+)
+ arch/arm/boot/dts/Makefile           |  3 ++-
+ drivers/gpu/drm/panel/panel-simple.c | 27 +++++++++++++++++++++++++++
+ 2 files changed, 29 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 566529092..e50906196 100644
+index 3f1859094..bd56c855b 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
-@@ -923,6 +923,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
- 	stm32h743i-eval.dtb \
- 	stm32h743i-disco.dtb \
- 	stm32mp157a-dk1.dtb \
-+	stm32mp157a-visionsom.dtb \
- 	stm32mp157c-dk2.dtb \
- 	stm32mp157c-dk2-a7-examples.dtb \
- 	stm32mp157c-dk2-m4-examples.dtb \
+@@ -1007,7 +1007,8 @@ dtb-$(CONFIG_ARCH_STM32) += \
+ 	stm32mp157c-ev1-a7-examples.dtb \
+ 	stm32mp157c-ev1-m4-examples.dtb \
+ 	stm32mp157f-ev1-a7-examples.dtb \
+-	stm32mp157f-ev1-m4-examples.dtb
++	stm32mp157f-ev1-m4-examples.dtb \
++	stm32mp157a-visionsom.dtb
+ 
+ dtb-$(CONFIG_MACH_SUN4I) += \
+ 	sun4i-a10-a1000.dtb \
 diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
-index 97964f7f2..d07095285 100644
+index 8abb31f83..3f5f13387 100644
 --- a/drivers/gpu/drm/panel/panel-simple.c
 +++ b/drivers/gpu/drm/panel/panel-simple.c
-@@ -1872,6 +1872,31 @@ static const struct panel_desc ortustech_com43h4m85ulc = {
- 	.bus_flags = DRM_BUS_FLAG_DE_HIGH | DRM_BUS_FLAG_PIXDATA_POSEDGE,
+@@ -2440,6 +2440,30 @@ static const struct panel_desc pda_91_00156_a0  = {
+ 	.bus_format = MEDIA_BUS_FMT_RGB888_1X24,
  };
  
 +static const struct drm_display_mode powertip_ph800480t013_ibc17_mode = {
@@ -52,14 +54,13 @@ index 97964f7f2..d07095285 100644
 +	.bus_format = MEDIA_BUS_FMT_RGB666_1X18,
 +	.bus_flags = DRM_BUS_FLAG_DE_HIGH | DRM_BUS_FLAG_PIXDATA_NEGEDGE,
 +};
-+
+ 
  static const struct drm_display_mode qd43003c0_40_mode = {
  	.clock = 9000,
- 	.hdisplay = 480,
-@@ -2504,6 +2529,9 @@ static const struct of_device_id platform_of_match[] = {
+@@ -3346,6 +3370,9 @@ static const struct of_device_id platform_of_match[] = {
  	}, {
- 		.compatible = "ortustech,com43h4m85ulc",
- 		.data = &ortustech_com43h4m85ulc,
+ 		.compatible = "pda,91-00156-a0",
+ 		.data = &pda_91_00156_a0,
 +	}, {
 +		.compatible = "powertip,ph800480t013-ibc17",
 +		.data = &powertip_ph800480t013_ibc17,

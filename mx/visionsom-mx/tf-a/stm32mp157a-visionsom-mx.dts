@@ -9,15 +9,20 @@
  */
 
 /dts-v1/;
-#include <dt-bindings/clock/stm32mp1-clksrc.h>
-#include "stm32mp15-mx.dtsi"
-
-#include "stm32mp157c.dtsi"
-#include "stm32mp157cab-pinctrl.dtsi"
-#include "stm32mp15-ddr.dtsi"
-#include "stm32mp157c-security.dtsi"
 
 /* USER CODE BEGIN includes */
+
+#include <dt-bindings/clock/stm32mp1-clksrc.h>
+#include <dt-bindings/power/stm32mp1-power.h>
+#include <dt-bindings/soc/st,stm32-etzpc.h>
+
+#include "stm32mp157.dtsi"
+#include "stm32mp15xa.dtsi"
+#include "stm32mp15-pinctrl.dtsi"
+#include "stm32mp15xxab-pinctrl.dtsi"
+#include "stm32mp15-mx.dtsi"
+#include "stm32mp15-ddr.dtsi"
+
 /* USER CODE END includes */
 
 / {
@@ -25,6 +30,17 @@
 	compatible = "st,stm32mp157a-visionsom-mx", "st,stm32mp157";
 
 	/* USER CODE BEGIN root */
+
+        aliases {
+                serial0 = &uart4;
+		mmc0 = &sdmmc1;
+		mmc1 = &sdmmc2;
+        };
+
+        chosen {
+                stdout-path = "serial0:115200n8";
+        };
+
 	/* USER CODE END root */
 
 	clocks {
@@ -74,6 +90,25 @@
 		};
 	};
 
+	sdmmc2_pins_mx: sdmmc2_mx-0 {
+		pins1 {
+			pinmux = <STM32_PINMUX('B', 3, AF9)>, /* SDMMC2_D2 */
+					 <STM32_PINMUX('B', 4, AF9)>, /* SDMMC2_D3 */
+					 <STM32_PINMUX('B', 14, AF9)>, /* SDMMC2_D0 */
+					 <STM32_PINMUX('B', 15, AF9)>, /* SDMMC2_D1 */
+					 <STM32_PINMUX('G', 6, AF10)>; /* SDMMC2_CMD */
+			bias-pull-up;
+			drive-push-pull;
+			slew-rate = <1>;
+		};
+		pins2 {
+			pinmux = <STM32_PINMUX('E', 3, AF9)>; /* SDMMC2_CK */
+			bias-pull-up;
+			drive-push-pull;
+			slew-rate = <3>;
+		};
+	};
+
 	uart4_pins_mx: uart4_mx-0 {
 		pins1 {
 			pinmux = <STM32_PINMUX('B', 2, AF8)>; /* UART4_RX */
@@ -81,19 +116,6 @@
 		};
 		pins2 {
 			pinmux = <STM32_PINMUX('G', 11, AF6)>; /* UART4_TX */
-			bias-disable;
-			drive-push-pull;
-			slew-rate = <0>;
-		};
-	};
-
-	uart8_pins_mx: uart8_mx-0 {
-		pins1 {
-			pinmux = <STM32_PINMUX('E', 0, AF8)>; /* UART8_RX */
-			bias-disable;
-		};
-		pins2 {
-			pinmux = <STM32_PINMUX('E', 1, AF8)>; /* UART8_TX */
 			bias-disable;
 			drive-push-pull;
 			slew-rate = <0>;
@@ -180,7 +202,7 @@
 		cfg = < 2 49 1 7 31 PQR(1,1,0) >;
 	};
 	pll4:st,pll@3 {
-		cfg = < 3 98 5 7 1 PQR(1,1,0) >;
+		cfg = < 3 98 5 7 5 PQR(1,1,0) >;
 	};
 };
 
@@ -189,7 +211,42 @@
 	secure-status = "okay";
 
 	/* USER CODE BEGIN bsec */
+
+        board_id: board_id@ec {
+                reg = <0xec 0x4>;
+                st,non-secure-otp;
+        };
+
 	/* USER CODE END bsec */
+};
+
+&etzpc{
+	st,decprot = <
+	/*"Non Secured" peripherals*/
+	DECPROT(STM32MP1_ETZPC_ETH_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
+	DECPROT(STM32MP1_ETZPC_I2C4_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
+	DECPROT(STM32MP1_ETZPC_SDMMC3_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
+	DECPROT(STM32MP1_ETZPC_DLYBSD3_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
+	DECPROT(STM32MP1_ETZPC_TIM1_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
+	DECPROT(STM32MP1_ETZPC_UART4_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
+	DECPROT(STM32MP1_ETZPC_UART7_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
+	DECPROT(STM32MP1_ETZPC_OTG_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
+
+	/*Restriction: following IDs are not managed  - please to use User-Section if needed:
+		STM32MP1_ETZPC_DMA1_ID, STM32MP1_ETZPC_DMA2_ID, STM32MP1_ETZPC_DMAMUX_ID,
+		STM32MP1_ETZPC_SRAMx_ID, STM32MP1_ETZPC_RETRAM_ID, STM32MP1_ETZPC_BKPSRAM_ID*/
+
+	/* USER CODE BEGIN etzpc_decprot */
+		/*STM32CubeMX generates a basic and standard configuration for ETZPC.
+		Additional device configurations can be added here if needed.
+		"etzpc" node could be also overloaded in "addons" User-Section.*/
+	/* USER CODE END etzpc_decprot */
+	>;
+
+	secure-status = "okay";
+
+	/* USER CODE BEGIN etzpc */
+	/* USER CODE END etzpc */
 };
 
 &rcc{
@@ -219,6 +276,15 @@
 	/* USER CODE END sdmmc1 */
 };
 
+&sdmmc2{
+	pinctrl-names = "default";
+	pinctrl-0 = <&sdmmc2_pins_mx>;
+	status = "okay";
+
+	/* USER CODE BEGIN sdmmc2 */
+	/* USER CODE END sdmmc2 */
+};
+
 &tamp{
 	status = "okay";
 	secure-status = "okay";
@@ -236,15 +302,39 @@
 	/* USER CODE END uart4 */
 };
 
-&uart8{
-	pinctrl-names = "default";
-	pinctrl-0 = <&uart8_pins_mx>;
-	status = "okay";
+/* USER CODE BEGIN addons */
 
-	/* USER CODE BEGIN uart8 */
-	/* USER CODE END uart8 */
+&nvmem_layout {
+        nvmem-cells = <&cfg0_otp>,
+                      <&part_number_otp>,
+                      <&monotonic_otp>,
+                      <&nand_otp>,
+                      <&uid_otp>,
+                      <&package_otp>,
+                      <&hw2_otp>,
+                      <&pkh_otp>,
+                      <&board_id>;
+
+        nvmem-cell-names = "cfg0_otp",
+                           "part_number_otp",
+                           "monotonic_otp",
+                           "nand_otp",
+                           "uid_otp",
+                           "package_otp",
+                           "hw2_otp",
+                           "pkh_otp",
+                           "board_id";
 };
 
-/* USER CODE BEGIN addons */
+&pwr_regulators {
+        system_suspend_supported_soc_modes = <
+                STM32_PM_CSLEEP_RUN
+                STM32_PM_CSTOP_ALLOW_LP_STOP
+                STM32_PM_CSTOP_ALLOW_LPLV_STOP
+                STM32_PM_CSTOP_ALLOW_STANDBY_DDR_SR
+        >;
+        system_off_soc_mode = <STM32_PM_CSTOP_ALLOW_STANDBY_DDR_OFF>;
+};
+
 /* USER CODE END addons */
 

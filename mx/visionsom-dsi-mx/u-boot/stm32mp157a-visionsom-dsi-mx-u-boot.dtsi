@@ -9,17 +9,19 @@
  */
 
 #include <dt-bindings/clock/stm32mp1-clksrc.h>
-#include "stm32mp15-mx-dsi.dtsi"
-
-#include "stm32mp157-u-boot.dtsi"
-#include "stm32mp15-ddr.dtsi"
+#include "stm32mp15-mx.dtsi"
 
 /* USER CODE BEGIN includes */
+
+#include "stm32mp15-u-boot.dtsi"
+#include "stm32mp15-ddr.dtsi"
+
 /* USER CODE END includes */
 
 / {
 
 	/* USER CODE BEGIN root */
+
 	aliases {
 		serial0 = &uart4;
 		mmc0 = &sdmmc1;
@@ -154,13 +156,9 @@
 		u-boot,dm-pre-reloc;
 	};
 	pll4:st,pll@3 {
-		cfg = < 3 98 5 7 1 PQR(1,1,0) >;
+		cfg = < 3 98 5 7 5 PQR(1,1,0) >;
 		u-boot,dm-pre-reloc;
 	};
-};
-
-&ltdc {
-        u-boot,dm-pre-proper;
 };
 
 &rcc{
@@ -189,13 +187,6 @@
 
 	/* USER CODE BEGIN uart4 */
 	/* USER CODE END uart4 */
-};
-
-&uart8{
-	u-boot,dm-pre-reloc;
-
-	/* USER CODE BEGIN uart8 */
-	/* USER CODE END uart8 */
 };
 
 /* USER CODE BEGIN addons */

@@ -1,20 +1,20 @@
-From ba170b6ee6ca97a30261681889464ec863dc44a6 Mon Sep 17 00:00:00 2001
+From 855cbcc70d2af93aef4f7c14541dec647890d27b Mon Sep 17 00:00:00 2001
 From: Krzysztof Chojnowski <krzysiek@embedev.pl>
-Date: Fri, 7 Feb 2020 10:23:48 +0100
-Subject: [PATCH] Added ili9881c driver for Powertip PH720128T003
+Date: Wed, 1 Jul 2020 13:37:17 +0200
+Subject: [PATCH] Fixed ili9881c driver for Powertip PH720128T003
 
 ---
  drivers/video/Kconfig           |   8 +
  drivers/video/Makefile          |   1 +
- drivers/video/ilitek-ili9881c.c | 401 ++++++++++++++++++++++++++++++++
- 3 files changed, 410 insertions(+)
+ drivers/video/ilitek-ili9881c.c | 398 ++++++++++++++++++++++++++++++++
+ 3 files changed, 407 insertions(+)
  create mode 100644 drivers/video/ilitek-ili9881c.c
 
 diff --git a/drivers/video/Kconfig b/drivers/video/Kconfig
-index 8809552..5fc828d 100644
+index 50ab3650ee..fc7b95bb8a 100644
 --- a/drivers/video/Kconfig
 +++ b/drivers/video/Kconfig
-@@ -327,6 +327,14 @@ config VIDEO_LCD_ANX9804
+@@ -325,6 +325,14 @@ config VIDEO_LCD_ANX9804
  	from a parallel LCD interface and translate it on the fy into a DP
  	interface for driving eDP TFT displays. It uses I2C for configuration.
  
@@ -30,10 +30,10 @@ index 8809552..5fc828d 100644
  	bool "OTM8009A DSI LCD panel support"
  	depends on DM_VIDEO
 diff --git a/drivers/video/Makefile b/drivers/video/Makefile
-index c3d39ed..1e1d225 100644
+index df7119d62a..d8f39f2645 100644
 --- a/drivers/video/Makefile
 +++ b/drivers/video/Makefile
-@@ -50,6 +50,7 @@ obj-$(CONFIG_VIDEO_IPUV3) += mxc_ipuv3_fb.o ipu_common.o ipu_disp.o
+@@ -52,6 +52,7 @@ obj-$(CONFIG_VIDEO_IPUV3) += imx/
  obj-$(CONFIG_VIDEO_IVYBRIDGE_IGD) += ivybridge_igd.o
  obj-$(CONFIG_VIDEO_LCD_ANX9804) += anx9804.o
  obj-$(CONFIG_VIDEO_LCD_HITACHI_TX18D42VM) += hitachi_tx18d42vm_lcd.o
@@ -43,16 +43,16 @@ index c3d39ed..1e1d225 100644
  obj-$(CONFIG_VIDEO_LCD_SSD2828) += ssd2828.o
 diff --git a/drivers/video/ilitek-ili9881c.c b/drivers/video/ilitek-ili9881c.c
 new file mode 100644
-index 0000000..f12d0c6
+index 0000000000..2f4045d163
 --- /dev/null
 +++ b/drivers/video/ilitek-ili9881c.c
-@@ -0,0 +1,401 @@
+@@ -0,0 +1,398 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +
 +#include <common.h>
 +#include <backlight.h>
 +#include <dm.h>
-+#include <mipi_display.h>
++#include <mipi_dsi.h>
 +#include <panel.h>
 +#include <asm/gpio.h>
 +#include <power/regulator.h>
@@ -336,12 +336,6 @@ index 0000000..f12d0c6
 +	struct ili9881c_panel_priv *priv = dev_get_priv(dev);
 +	int ret;
 +
-+	device->lanes = 2;
-+	device->format = MIPI_DSI_FMT_RGB888;
-+	device->mode_flags = MIPI_DSI_MODE_VIDEO |
-+			     MIPI_DSI_MODE_VIDEO_SYNC_PULSE |
-+			     MIPI_DSI_MODE_LPM;
-+
 +	ret = mipi_dsi_attach(device);
 +	if (ret < 0)
 +		return ret;
@@ -359,10 +353,6 @@ index 0000000..f12d0c6
 +		return ret;
 +
 +	mdelay(20);
-+
-+	ret = backlight_enable(priv->backlight);
-+	if (ret)
-+		return ret;
 +
 +	return 0;
 +}
@@ -398,6 +388,7 @@ index 0000000..f12d0c6
 +
 +	ret = uclass_get_device_by_phandle(UCLASS_PANEL_BACKLIGHT, dev,
 +					   "backlight", &priv->backlight);
++	printf("Getting backlight %d\n");
 +	if (ret) {
 +		dev_err(dev, "Cannot get backlight: ret=%d\n", ret);
 +		return ret;
@@ -408,10 +399,10 @@ index 0000000..f12d0c6
 +
 +static int ili9881c_panel_probe(struct udevice *dev)
 +{
-+	struct ili9881c_panel_priv *priv = dev_get_priv(dev);
-+	int ret;
 +
-+	dev_err(dev, "Probe display\n");
++	struct ili9881c_panel_priv *priv = dev_get_priv(dev);
++	struct mipi_dsi_panel_plat *plat = dev_get_platdata(dev);
++	int ret;
 +
 +	if (IS_ENABLED(CONFIG_DM_REGULATOR) && priv->reg) {
 +		ret = regulator_set_enable(priv->reg, true);
@@ -424,6 +415,12 @@ index 0000000..f12d0c6
 +	mdelay(1);
 +	dm_gpio_set_value(&priv->reset, false);
 +	mdelay(10);
++
++	plat->lanes = 2;
++	plat->format = MIPI_DSI_FMT_RGB888;
++	plat->mode_flags = MIPI_DSI_MODE_VIDEO |
++		 	   MIPI_DSI_MODE_VIDEO_SYNC_PULSE |
++			   MIPI_DSI_MODE_LPM;
 +
 +	return 0;
 +}
