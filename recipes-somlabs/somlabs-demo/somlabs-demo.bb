@@ -14,7 +14,7 @@ SRC_URI = " \
     file://somlabs_demo_run.sh \
     "
 
-M4V_VIDEO_URL = "http://mirror.cessen.com/blender.org/peach/trailer/trailer_iphone.m4v"
+EXAMPLE_VIDEO_URL = "http://ftp.somlabs.com/VisionSOM-STM32MP1/SoMLabs-STM32MP1-vdemo-2020-05.mp4"
 
 do_install() {
 
@@ -22,7 +22,7 @@ do_install() {
     install -d ${D}${prefix}/local/SomlabsDemo/
     install -m 0755 ${WORKDIR}/somlabs_demo_run.sh ${D}${prefix}/local/weston-start-at-startup/somlabs_demo_run.sh
     install -m 0755 ${WORKDIR}/SomlabsDemo ${D}${prefix}/local/SomlabsDemo/SomlabsDemo
-    wget ${M4V_VIDEO_URL} -O ${D}${prefix}/local/SomlabsDemo/video.m4v
+    wget ${EXAMPLE_VIDEO_URL} -O ${D}${prefix}/local/SomlabsDemo/example_video.mp4
 }
 
 FILES_${PN} = "${prefix}/local/SomlabsDemo/ ${prefix}/local/weston-start-at-startup/"
