@@ -1,0 +1,26 @@
+From 4a50b95bdfbcb04a25cce71a7446447b8fbade55 Mon Sep 17 00:00:00 2001
+From: Krzysztof Chojnowski <krzysiek@embedev.pl>
+Date: Wed, 3 Jun 2020 17:34:42 +0200
+Subject: [PATCH] Boot from mmc0 only
+
+---
+ include/configs/stm32mp1.h | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/include/configs/stm32mp1.h b/include/configs/stm32mp1.h
+index 1501845..c8f4edd 100644
+--- a/include/configs/stm32mp1.h
++++ b/include/configs/stm32mp1.h
+@@ -133,11 +133,7 @@
+ 
+ /* default order is eMMC (SDMMC 1)/ NAND / SDCARD (SDMMC 0) / SDMMC2 */
+ #define BOOT_TARGET_DEVICES(func) \
+-	func(MMC, mmc, 1) \
+-	func(UBIFS, ubifs, 0) \
+-	func(MMC, mmc, 0) \
+-	func(MMC, mmc, 2) \
+-	func(PXE, pxe, na)
++	func(MMC, mmc, 0)
+ 
+ /*
+  * bootcmd for stm32mp1:
