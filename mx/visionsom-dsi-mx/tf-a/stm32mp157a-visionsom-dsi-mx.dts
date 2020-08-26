@@ -9,19 +9,19 @@
  */
 
 /dts-v1/;
-
-/* USER CODE BEGIN includes */
-
+#include <dt-bindings/pinctrl/stm32-pinfunc.h>
 #include <dt-bindings/clock/stm32mp1-clksrc.h>
-#include <dt-bindings/power/stm32mp1-power.h>
 #include <dt-bindings/soc/st,stm32-etzpc.h>
+#include "stm32mp15-mx.dtsi"
 
 #include "stm32mp157.dtsi"
 #include "stm32mp15xa.dtsi"
-#include "stm32mp15-pinctrl.dtsi"
 #include "stm32mp15xxab-pinctrl.dtsi"
-#include "stm32mp15-mx.dtsi"
 #include "stm32mp15-ddr.dtsi"
+
+/* USER CODE BEGIN includes */
+
+#include <dt-bindings/power/stm32mp1-power.h>
 
 /* USER CODE END includes */
 
@@ -44,6 +44,7 @@
 	/* USER CODE END root */
 
 	clocks {
+
 		/* USER CODE BEGIN clocks */
 		/* USER CODE END clocks */
 
@@ -191,18 +192,20 @@
 		CLK_LPTIM23_DISABLED
 		CLK_LPTIM45_DISABLED
 	>;
-	pll1:st,pll@0 {
-		cfg = < 2 80 0 1 1 PQR(1,0,0) >;
-		frac = < 0x800>;
-	};
 	pll2:st,pll@1 {
+		compatible = "st,stm32mp1-pll";
+		reg = <1>;
 		cfg = < 2 65 1 0 0 PQR(1,1,1) >;
-		frac = < 0x1400>;
+		frac = < 0x1400 >;
 	};
 	pll3:st,pll@2 {
+		compatible = "st,stm32mp1-pll";
+		reg = <2>;
 		cfg = < 2 49 1 7 31 PQR(1,1,0) >;
 	};
 	pll4:st,pll@3 {
+		compatible = "st,stm32mp1-pll";
+		reg = <3>;
 		cfg = < 3 98 5 7 5 PQR(1,1,0) >;
 	};
 };
@@ -224,6 +227,8 @@
 &etzpc{
 	st,decprot = <
 	/*"Non Secured" peripherals*/
+	DECPROT(STM32MP1_ETZPC_DMA1_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
+	DECPROT(STM32MP1_ETZPC_DMAMUX_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
 	DECPROT(STM32MP1_ETZPC_ETH_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
 	DECPROT(STM32MP1_ETZPC_I2C4_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
 	DECPROT(STM32MP1_ETZPC_SDMMC3_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
@@ -232,9 +237,14 @@
 	DECPROT(STM32MP1_ETZPC_UART4_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
 	DECPROT(STM32MP1_ETZPC_UART7_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
 	DECPROT(STM32MP1_ETZPC_OTG_ID, DECPROT_NS_RW, DECPROT_UNLOCK)
+	/*"Secured" peripherals*/
+	DECPROT(STM32MP1_ETZPC_DDRCTRL_ID, DECPROT_S_RW, DECPROT_UNLOCK)
+	DECPROT(STM32MP1_ETZPC_DDRPHYC_ID, DECPROT_S_RW, DECPROT_UNLOCK)
+	DECPROT(STM32MP1_ETZPC_STGENC_ID, DECPROT_S_RW, DECPROT_UNLOCK)
+	/*"Mcu Isolation" peripherals*/
+	DECPROT(STM32MP1_ETZPC_DMA2_ID, DECPROT_MCU_ISOLATION, DECPROT_UNLOCK)
 
 	/*Restriction: following IDs are not managed  - please to use User-Section if needed:
-		STM32MP1_ETZPC_DMA1_ID, STM32MP1_ETZPC_DMA2_ID, STM32MP1_ETZPC_DMAMUX_ID,
 		STM32MP1_ETZPC_SRAMx_ID, STM32MP1_ETZPC_RETRAM_ID, STM32MP1_ETZPC_BKPSRAM_ID*/
 
 	/* USER CODE BEGIN etzpc_decprot */

@@ -9,16 +9,16 @@
  */
 
 /dts-v1/;
+#include <dt-bindings/pinctrl/stm32-pinfunc.h>
+
+#include "stm32mp157.dtsi"
+#include "stm32mp15xa.dtsi"
+#include "stm32mp15xxab-pinctrl.dtsi"
+#include "stm32mp157-m4-srm.dtsi"
 
 /* USER CODE BEGIN includes */
 
 #include <dt-bindings/rtc/rtc-stm32.h>
-
-#include "stm32mp157.dtsi"
-#include "stm32mp15xa.dtsi"
-#include "stm32mp15-pinctrl.dtsi"
-#include "stm32mp15xxab-pinctrl.dtsi"
-#include "stm32mp157-m4-srm.dtsi"
 
 /* USER CODE END includes */
 
@@ -27,6 +27,7 @@
 	compatible = "st,stm32mp157a-visionsom-mx", "st,stm32mp157";
 
 	memory@c0000000 {
+		device_type = "memory";
 		reg = <0xc0000000 0x20000000>;
 
 		/* USER CODE BEGIN memory */
@@ -46,11 +47,6 @@
 		};
 
 		/* USER CODE END reserved-memory */
-
-		gpu_reserved: gpu@d4000000 {
-			reg = <0xd4000000 0x4000000>;
-			no-map;
-		};
 	};
 
 	/* USER CODE BEGIN root */
@@ -147,28 +143,27 @@
 	/* USER CODE END root */
 
 	clocks {
+
 		/* USER CODE BEGIN clocks */
 		/* USER CODE END clocks */
 
+#ifndef CONFIG_STM32MP1_TRUSTED
 		clk_lsi: clk-lsi {
 			clock-frequency = <32000>;
 		};
-
 		clk_hsi: clk-hsi {
 			clock-frequency = <64000000>;
 		};
-
 		clk_csi: clk-csi {
 			clock-frequency = <4000000>;
 		};
-
 		clk_lse: clk-lse {
 			clock-frequency = <32768>;
 		};
-
 		clk_hse: clk-hse {
 			clock-frequency = <24000000>;
 		};
+#endif	/*CONFIG_STM32MP1_TRUSTED*/
 	};
 
 }; /*root*/
@@ -586,11 +581,17 @@
 };
 
 &m4_rproc{
-	recovery;
 	status = "okay";
 
 	/* USER CODE BEGIN m4_rproc */
 	/* USER CODE END m4_rproc */
+
+	m4_system_resources{
+		status = "okay";
+
+		/* USER CODE BEGIN m4_system_resources */
+		/* USER CODE END m4_system_resources */
+	};
 };
 
 &bsec{
@@ -598,6 +599,31 @@
 
 	/* USER CODE BEGIN bsec */
 	/* USER CODE END bsec */
+};
+
+&dma1{
+	status = "okay";
+
+	/* USER CODE BEGIN dma1 */
+	/* USER CODE END dma1 */
+};
+
+&dma2{
+	status = "disabled";
+
+	/* USER CODE BEGIN dma2 */
+	/* USER CODE END dma2 */
+};
+
+&dmamux1{
+
+	dma-masters = <&dma1>;
+	dma-channels = <8>;
+
+	status = "okay";
+
+	/* USER CODE BEGIN dmamux1 */
+	/* USER CODE END dmamux1 */
 };
 
 &ethernet0{
@@ -694,6 +720,20 @@
 	};
 
 	/* USER CODE END ltdc */
+};
+
+&m4_dma2{
+	status = "okay";
+
+	/* USER CODE BEGIN m4_dma2 */
+	/* USER CODE END m4_dma2 */
+};
+
+&mdma1{
+	status = "okay";
+
+	/* USER CODE BEGIN mdma1 */
+	/* USER CODE END mdma1 */
 };
 
 &rcc{

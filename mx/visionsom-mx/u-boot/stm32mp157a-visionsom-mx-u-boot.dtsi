@@ -11,11 +11,10 @@
 #include <dt-bindings/clock/stm32mp1-clksrc.h>
 #include "stm32mp15-mx.dtsi"
 
-/* USER CODE BEGIN includes */
-
 #include "stm32mp15-u-boot.dtsi"
 #include "stm32mp15-ddr.dtsi"
 
+/* USER CODE BEGIN includes */
 /* USER CODE END includes */
 
 / {
@@ -40,6 +39,7 @@
 		/* USER CODE BEGIN clocks */
 		/* USER CODE END clocks */
 
+#ifndef CONFIG_STM32MP1_TRUSTED
 		clk_lsi: clk-lsi {
 			u-boot,dm-pre-reloc;
 			status = "disabled";
@@ -47,14 +47,12 @@
 			/* USER CODE BEGIN clk_lsi */
 			/* USER CODE END clk_lsi */
 		};
-
 		clk_hsi: clk-hsi {
 			u-boot,dm-pre-reloc;
 
 			/* USER CODE BEGIN clk_hsi */
 			/* USER CODE END clk_hsi */
 		};
-
 		clk_csi: clk-csi {
 			u-boot,dm-pre-reloc;
 			status = "disabled";
@@ -62,7 +60,6 @@
 			/* USER CODE BEGIN clk_csi */
 			/* USER CODE END clk_csi */
 		};
-
 		clk_lse: clk-lse {
 			u-boot,dm-pre-reloc;
 			st,drive = < LSEDRV_MEDIUM_HIGH >;
@@ -70,7 +67,6 @@
 			/* USER CODE BEGIN clk_lse */
 			/* USER CODE END clk_lse */
 		};
-
 		clk_hse: clk-hse {
 			u-boot,dm-pre-reloc;
 			st,digbypass;
@@ -78,9 +74,12 @@
 			/* USER CODE BEGIN clk_hse */
 			/* USER CODE END clk_hse */
 		};
+#endif	/*CONFIG_STM32MP1_TRUSTED*/
 	};
 
 }; /*root*/
+
+#ifndef CONFIG_STM32MP1_TRUSTED
 
 &rcc {
 	u-boot,dm-pre-reloc;
@@ -139,31 +138,25 @@
 		CLK_LPTIM23_DISABLED
 		CLK_LPTIM45_DISABLED
 	>;
-	pll1:st,pll@0 {
-		cfg = < 2 80 0 1 1 PQR(1,0,0) >;
-		frac = < 0x800>;
-		u-boot,dm-pre-reloc;
-	};
 	pll2:st,pll@1 {
+		compatible = "st,stm32mp1-pll";
+		reg = <1>;
 		cfg = < 2 65 1 0 0 PQR(1,1,1) >;
-		frac = < 0x1400>;
+		frac = < 0x1400 >;
 		u-boot,dm-pre-reloc;
 	};
 	pll3:st,pll@2 {
+		compatible = "st,stm32mp1-pll";
+		reg = <2>;
 		cfg = < 2 49 1 7 31 PQR(1,1,0) >;
 		u-boot,dm-pre-reloc;
 	};
 	pll4:st,pll@3 {
+		compatible = "st,stm32mp1-pll";
+		reg = <3>;
 		cfg = < 3 98 5 7 5 PQR(1,1,0) >;
 		u-boot,dm-pre-reloc;
 	};
-};
-
-&rcc{
-	u-boot,dm-pre-reloc;
-
-	/* USER CODE BEGIN rcc */
-	/* USER CODE END rcc */
 };
 
 &sdmmc1{
@@ -179,6 +172,8 @@
 	/* USER CODE BEGIN sdmmc2 */
 	/* USER CODE END sdmmc2 */
 };
+
+#endif	/*CONFIG_STM32MP1_TRUSTED*/
 
 &uart4{
 	u-boot,dm-pre-reloc;
