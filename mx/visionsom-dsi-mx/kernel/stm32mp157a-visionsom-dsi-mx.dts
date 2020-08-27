@@ -606,22 +606,19 @@
 	status = "okay";
 
 	/* USER CODE BEGIN ethernet0 */
-
 	phy-mode = "rmii";
 	max-speed = <100>;
 	phy-handle = <&phy1>;
-	st,eth_ref_clk_sel = <1>;
+	st,eth-ref-clk-sel;
 	clock-names = "stmmaceth",
+		"eth-ck",
 		"mac-clk-tx",
 		"mac-clk-rx",
-		"eth-ck",
-		"syscfg-clk",
 		"ethstp";
 	clocks = <&rcc ETHMAC>,
+		<&rcc ETHCK_K>,
 		<&rcc ETHTX>,
 		<&rcc ETHRX>,
-		<&rcc ETHCK_K>,
-		<&rcc SYSCFG>,
 		<&rcc ETHSTP>;
 
 	mdio0 {
