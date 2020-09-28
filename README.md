@@ -23,7 +23,7 @@ cd openstlinux-4.19-thud-mp1-20-02-19
 repo init -u https://github.com/STMicroelectronics/oe-manifest.git -b refs/tags/openstlinux-20-02-19
 repo sync
 cd layers/meta-st
-git clone https://github.com/SoMLabs/openst-meta-somlabs.git meta-somlabs
+git clone https://github.com/SoMLabs/openst-meta-somlabs.git meta-somlabs -b thud
 cd ../../
 DISTRO=openstlinux-weston MACHINE=stm32mp157a-visionsom-mx source layers/meta-st/scripts/envsetup.sh
 bitbake st-image-weston
