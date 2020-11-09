@@ -10,19 +10,29 @@ DEPENDS += "gstreamer1.0-plugins-base"
 DEPENDS += "gstreamer1.0-plugins-bad"
 
 SRC_URI = " \
-    file://SomlabsDemo \
+    file://somlabs-demo.pro \
+    file://*.h \
+    file://*.cpp \
+    file://*.qml \
+    file://qml.qrc \
+    file://qtquickcontrols2.conf \
+    file://img/background.jpg \
     file://somlabs_demo_run.sh \
+    file://somlabs.png \
     "
 
 EXAMPLE_VIDEO_URL = "http://ftp.somlabs.com/VisionSOM-STM32MP1/SoMLabs-STM32MP1-vdemo-2020-05.mp4"
 
-do_install() {
+inherit qmake5
 
-    install -d ${D}${prefix}/local/weston-start-at-startup/
-    install -d ${D}${prefix}/local/SomlabsDemo/
-    install -m 0755 ${WORKDIR}/somlabs_demo_run.sh ${D}${prefix}/local/weston-start-at-startup/somlabs_demo_run.sh
-    install -m 0755 ${WORKDIR}/SomlabsDemo ${D}${prefix}/local/SomlabsDemo/SomlabsDemo
-    wget ${EXAMPLE_VIDEO_URL} -O ${D}${prefix}/local/SomlabsDemo/example_video.mp4
+S = "${WORKDIR}"
+
+do_install() {
+    install -d ${D}${prefix}/local/somlabs-demo/
+    install -m 0755 ${WORKDIR}/somlabs_demo_run.sh ${D}${prefix}/local/somlabs-demo/somlabs_demo_run.sh
+    install -m 0755 ${WORKDIR}/somlabs.png ${D}${prefix}/local/somlabs-demo/somlabs.png
+    install -m 0755 somlabs-demo ${D}${prefix}/local/somlabs-demo/somlabs-demo
+    wget ${EXAMPLE_VIDEO_URL} -O ${D}${prefix}/local/somlabs-demo/example_video.mp4
 }
 
-FILES_${PN} = "${prefix}/local/SomlabsDemo/ ${prefix}/local/weston-start-at-startup/"
+FILES_${PN} = "${prefix}/local/somlabs-demo/"

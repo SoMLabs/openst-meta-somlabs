@@ -1,2 +1,2 @@
 #!/bin/sh
-/usr/local/SomlabsDemo/SomlabsDemo -platform wayland-egl /usr/local/SomlabsDemo/example_video.mp4
+/usr/local/somlabs-demo/somlabs-demo -platform wayland-egl /usr/local/somlabs-demo/example_video.mp4
