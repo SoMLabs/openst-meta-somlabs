@@ -57,6 +57,7 @@
 		serial1 = &uart7;
 		mmc0 = &sdmmc1;
 		mmc1 = &sdmmc2;
+		mmc2 = &sdmmc3;
 	};
 
 	backlight: backlight {
@@ -160,7 +161,6 @@
 	/* USER CODE END root */
 
 	clocks {
-
 		/* USER CODE BEGIN clocks */
 		/* USER CODE END clocks */
 
@@ -739,9 +739,6 @@
 	status = "okay";
 
 	/* USER CODE BEGIN ltdc */
-
-	u-boot,dm-pre-reloc;
-
 	/* USER CODE END ltdc */
 };
 
@@ -883,6 +880,10 @@
 	status = "okay";
 
 	/* USER CODE BEGIN uart4 */
+
+        /delete-property/dmas;
+        /delete-property/dma-names;
+
 	/* USER CODE END uart4 */
 };
 

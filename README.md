@@ -18,9 +18,9 @@ The summary of required steps is shown below:
 
 ```shell
 cd <working directory path>/Distribution-Package
-mkdir openstlinux-5.4-dunfell-mp1-20-06-24
-cd openstlinux-5.4-dunfell-mp1-20-06-24
-repo init -u https://github.com/STMicroelectronics/oe-manifest.git -b refs/tags/openstlinux-5.4-dunfell-mp1-20-06-24
+mkdir openstlinux-5.4-dunfell-mp1-20-11-12
+cd openstlinux-5.4-dunfell-mp1-20-11-12
+repo init -u https://github.com/STMicroelectronics/oe-manifest.git -b refs/tags/openstlinux-5.4-dunfell-mp1-20-11-12
 repo sync
 cd layers/meta-st
 git clone -b dunfell https://github.com/SoMLabs/openst-meta-somlabs.git meta-somlabs

@@ -44,7 +44,6 @@
 	/* USER CODE END root */
 
 	clocks {
-
 		/* USER CODE BEGIN clocks */
 		/* USER CODE END clocks */
 
@@ -313,6 +312,10 @@
 	status = "okay";
 
 	/* USER CODE BEGIN uart4 */
+
+        /delete-property/dmas;
+        /delete-property/dma-names;
+
 	/* USER CODE END uart4 */
 };
 

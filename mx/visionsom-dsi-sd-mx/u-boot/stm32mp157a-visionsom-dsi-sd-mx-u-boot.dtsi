@@ -35,41 +35,34 @@
 	/* USER CODE END root */
 
 	clocks {
-		u-boot,dm-pre-reloc;
-
 		/* USER CODE BEGIN clocks */
 		/* USER CODE END clocks */
 
 #ifndef CONFIG_STM32MP1_TRUSTED
 		clk_lsi: clk-lsi {
-			u-boot,dm-pre-reloc;
 			status = "disabled";
 
 			/* USER CODE BEGIN clk_lsi */
 			/* USER CODE END clk_lsi */
 		};
 		clk_hsi: clk-hsi {
-			u-boot,dm-pre-reloc;
 
 			/* USER CODE BEGIN clk_hsi */
 			/* USER CODE END clk_hsi */
 		};
 		clk_csi: clk-csi {
-			u-boot,dm-pre-reloc;
 			status = "disabled";
 
 			/* USER CODE BEGIN clk_csi */
 			/* USER CODE END clk_csi */
 		};
 		clk_lse: clk-lse {
-			u-boot,dm-pre-reloc;
 			st,drive = < LSEDRV_MEDIUM_HIGH >;
 
 			/* USER CODE BEGIN clk_lse */
 			/* USER CODE END clk_lse */
 		};
 		clk_hse: clk-hse {
-			u-boot,dm-pre-reloc;
 			st,digbypass;
 
 			/* USER CODE BEGIN clk_hse */
