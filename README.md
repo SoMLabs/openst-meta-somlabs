@@ -18,9 +18,9 @@ The summary of required steps is shown below:
 
 ```shell
 cd <working directory path>/Distribution-Package
-mkdir openstlinux-5.4-dunfell-mp1-20-11-12
-cd openstlinux-5.4-dunfell-mp1-20-11-12
-repo init -u https://github.com/STMicroelectronics/oe-manifest.git -b refs/tags/openstlinux-5.4-dunfell-mp1-20-11-12
+mkdir openstlinux-5.10-dunfell-mp1-21-03-31
+cd openstlinux-5.10-dunfell-mp1-21-03-31
+repo init -u https://github.com/STMicroelectronics/oe-manifest.git -b refs/tags/openstlinux-5.10-dunfell-mp1-21-03-31
 repo sync
 cd layers/meta-st
 git clone -b dunfell https://github.com/SoMLabs/openst-meta-somlabs.git meta-somlabs
@@ -30,15 +30,17 @@ bitbake st-image-weston
 ```
 
 The following VisionSOM machines are available:
-* stm32mp157a-visionsom-rgb-emmc-mx Module with eMMC memory and RGB display connected
-* stm32mp157a-visionsom-rgb-sd-mx   Module with SD card and RGB display connected
-* stm32mp157a-visionsom-dsi-emmc-mx Module with eMMC memory and DSI display connected
-* stm32mp157a-visionsom-dsi-sd-mx   Module with SD card and DSI display connected
+* stm32mp157a-visionsom-rgb-emmc-mx  Module with eMMC memory and RGB display connected
+* stm32mp157a-visionsom-rgb-sd-mx    Module with SD card and RGB display connected
+* stm32mp157a-visionsom-dsi-emmc-mx  Module with eMMC memory and DSI display connected
+* stm32mp157a-visionsom-dsi-sd-mx    Module with SD card and DSI display connected
+* stm32mp157a-visionsom-hdmi-emmc-mx Module with eMMC memory and DSI/HDMI LT8912 converter connected
+* stm32mp157a-visionsom-hdmi-sd-mx   Module with SD card and DSI/HDMI LT8912 converter connected
 
 The compiled image files are located in the directory:
 
 ```
-openstlinux-5.4-dunfell-mp1-20-06-24/build-openstlinuxweston-<MACHINE_NAME>/tmp-glibc/deploy/images/<MACHINE_NAME>
+openstlinux-5.10-dunfell-mp1-21-03-31/build-openstlinuxweston-<MACHINE_NAME>/tmp-glibc/deploy/images/<MACHINE_NAME>
 ```
 
 ## Installing SD card image

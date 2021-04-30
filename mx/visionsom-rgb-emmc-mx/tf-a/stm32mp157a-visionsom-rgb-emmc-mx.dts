@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause) */
 /*
- * Copyright (C) STMicroelectronics 2020 - All Rights Reserved
+ * Copyright (C) STMicroelectronics 2021 - All Rights Reserved
  * Author: STM32CubeMX code generation for STMicroelectronics.
  */
 
@@ -34,7 +34,6 @@
         aliases {
                 serial0 = &uart4;
 		mmc0 = &sdmmc1;
-		mmc1 = &sdmmc2;
         };
 
         chosen {

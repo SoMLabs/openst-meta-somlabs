@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause) */
 /*
- * Copyright (C) STMicroelectronics 2020 - All Rights Reserved
+ * Copyright (C) STMicroelectronics 2021 - All Rights Reserved
  * Author: STM32CubeMX code generation for STMicroelectronics.
  */
 
@@ -14,7 +14,7 @@
 #include "stm32mp157.dtsi"
 #include "stm32mp15xa.dtsi"
 #include "stm32mp15xxab-pinctrl.dtsi"
-#include "stm32mp157-m4-srm.dtsi"
+#include "stm32mp15-m4-srm.dtsi"
 
 /* USER CODE BEGIN includes */
 
@@ -96,32 +96,15 @@
 	};
 
 	panel {
-		status = "okay";
-		u-boot,dm-pre-reloc;
-		compatible = "simple-panel";
+		compatible = "powertip,ph800480t013-ibc17", "simple-panel";
 		backlight = <&backlight>;
-		power-supply = <&vdd>;
-		enable-gpios = <&gpioa 1 GPIO_ACTIVE_LOW>;
-
-		display-timings {
-			timing0: timing0 {
-				clock-frequency = <33300000>;
-				hactive = <800>;
-				vactive = <480>;
-				hfront-porch = <210>;
-				hback-porch = <46>;
-				hsync-len = <46>;
-				vback-porch = <23>;
-				vfront-porch = <22>;
-				vsync-len = <23>;
-				hsync-active = <0>;
-				vsync-active = <0>;
-				de-active = <0>;
-				pixelclk-active = <1>;
+		port {
+			panel_in: endpoint {
+				remote-endpoint = <&ltdc_out_rgb>;
 			};
 		};
 	};
-	
+
 	usb_phy_tuning: usb-phy-tuning {
 		st,hs-dc-level = <2>;
 		st,fs-rftime-tuning;
@@ -164,7 +147,7 @@
 		/* USER CODE BEGIN clocks */
 		/* USER CODE END clocks */
 
-#ifndef CONFIG_STM32MP1_TRUSTED
+#ifndef CONFIG_TFABOOT
 		clk_lsi: clk-lsi {
 			clock-frequency = <32000>;
 		};
@@ -180,7 +163,7 @@
 		clk_hse: clk-hse {
 			clock-frequency = <24000000>;
 		};
-#endif	/*CONFIG_STM32MP1_TRUSTED*/
+#endif	/*CONFIG_TFABOOT*/
 	};
 
 }; /*root*/
@@ -727,6 +710,13 @@
 	status = "okay";
 
 	/* USER CODE BEGIN ltdc */
+
+	port {
+		ltdc_out_rgb: endpoint {
+			remote-endpoint = <&panel_in>;
+		};
+	};
+
 	/* USER CODE END ltdc */
 };
 

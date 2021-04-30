@@ -27,7 +27,7 @@
 
 / {
 	model = "STMicroelectronics custom STM32CubeMX board";
-	compatible = "st,stm32mp157a-visionsom-dsi-sd-mx", "st,stm32mp157";
+	compatible = "st,stm32mp157a-visionsom-hdmi-emmc-mx", "st,stm32mp157";
 
 	/* USER CODE BEGIN root */
 
@@ -72,18 +72,22 @@
 
 	sdmmc1_pins_mx: sdmmc1_mx-0 {
 		pins1 {
-			pinmux = <STM32_PINMUX('C', 8, AF12)>, /* SDMMC1_D0 */
+			pinmux = <STM32_PINMUX('A', 15, AF11)>, /* SDMMC1_D5 */
+					 <STM32_PINMUX('C', 8, AF12)>, /* SDMMC1_D0 */
 					 <STM32_PINMUX('C', 9, AF12)>, /* SDMMC1_D1 */
 					 <STM32_PINMUX('C', 11, AF12)>, /* SDMMC1_D3 */
 					 <STM32_PINMUX('D', 2, AF12)>, /* SDMMC1_CMD */
+					 <STM32_PINMUX('D', 3, AF11)>, /* SDMMC1_D7 */
+					 <STM32_PINMUX('E', 4, AF11)>, /* SDMMC1_D4 */
+					 <STM32_PINMUX('E', 5, AF11)>, /* SDMMC1_D6 */
 					 <STM32_PINMUX('E', 6, AF8)>; /* SDMMC1_D2 */
-			bias-disable;
+			bias-pull-up;
 			drive-push-pull;
 			slew-rate = <1>;
 		};
 		pins2 {
 			pinmux = <STM32_PINMUX('C', 12, AF12)>; /* SDMMC1_CK */
-			bias-disable;
+			bias-pull-up;
 			drive-push-pull;
 			slew-rate = <3>;
 		};

@@ -27,7 +27,7 @@
 
 / {
 	model = "STMicroelectronics custom STM32CubeMX board";
-	compatible = "st,stm32mp157a-visionsom-dsi-sd-mx", "st,stm32mp157";
+	compatible = "st,stm32mp157a-visionsom-hdmi-sd-mx", "st,stm32mp157";
 
 	/* USER CODE BEGIN root */
 

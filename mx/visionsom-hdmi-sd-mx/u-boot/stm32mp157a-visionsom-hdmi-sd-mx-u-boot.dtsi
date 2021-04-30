@@ -20,34 +20,16 @@
 / {
 
 	/* USER CODE BEGIN root */
+
 	aliases {
 		serial0 = &uart4;
 		mmc0 = &sdmmc1;
 		mmc1 = &sdmmc2;
+
 	};
 
 	chosen {
 		stdout-path = "serial0:115200n8";
-	};
-
-	panel {
-                display-timings {
-                        timing0: timing0 {
-                                clock-frequency = <33300000>;
-                                hactive = <800>;
-                                vactive = <480>;
-                                hfront-porch = <210>;
-                                hback-porch = <46>;
-                                hsync-len = <46>;
-                                vback-porch = <23>;
-                                vfront-porch = <22>;
-                                vsync-len = <23>;
-                                hsync-active = <0>;
-                                vsync-active = <0>;
-                                de-active = <0>;
-                                pixelclk-active = <1>;
-                        };
-                };
 	};
 
 	/* USER CODE END root */
@@ -123,6 +105,7 @@
 		CLK_CKPER_DISABLED
 		CLK_ETH_PLL3Q
 		CLK_SDMMC12_PLL4P
+		CLK_DSI_DSIPLL
 		CLK_STGEN_HSI
 		CLK_USBPHY_HSE
 		CLK_SPI2S1_DISABLED

@@ -24,7 +24,7 @@
 
 / {
 	model = "STMicroelectronics custom STM32CubeMX board";
-	compatible = "st,stm32mp157a-visionsom-dsi-emmc-mx", "st,stm32mp157";
+	compatible = "st,stm32mp157a-visionsom-hdmi-sd-mx", "st,stm32mp157";
 
 	memory@c0000000 {
 		device_type = "memory";
@@ -64,6 +64,17 @@
 		stdout-path = "serial0:115200n8";
 	};
 
+	hdmi {
+		compatible = "hdmi-connector";
+		type = "a";
+
+		port {
+			hdmi_connector_in: endpoint {
+				remote-endpoint = <&lt8912_hdmi_out>;
+			};
+		};
+	};
+
 	led {
 		compatible = "gpio-leds";
 		led1 {
@@ -86,13 +97,6 @@
 			pwms = <&{/soc/timer@44000000/pwm} 3 500000 0>;
 			max-brightness = <127>;
 		};
-	};
-
-	panel_backlight: panel-backlight {
-		compatible = "gpio-backlight";
-		gpios = <&gpiod 15 GPIO_ACTIVE_HIGH>;
-		default-on;
-		status = "okay";
 	};
 
 	usb_phy_tuning: usb-phy-tuning {
@@ -235,23 +239,19 @@
 		u-boot,dm-pre-reloc;
 		pins1 {
 			u-boot,dm-pre-reloc;
-			pinmux = <STM32_PINMUX('A', 15, AF11)>, /* SDMMC1_D5 */
-					 <STM32_PINMUX('C', 8, AF12)>, /* SDMMC1_D0 */
+			pinmux = <STM32_PINMUX('C', 8, AF12)>, /* SDMMC1_D0 */
 					 <STM32_PINMUX('C', 9, AF12)>, /* SDMMC1_D1 */
 					 <STM32_PINMUX('C', 11, AF12)>, /* SDMMC1_D3 */
 					 <STM32_PINMUX('D', 2, AF12)>, /* SDMMC1_CMD */
-					 <STM32_PINMUX('D', 3, AF11)>, /* SDMMC1_D7 */
-					 <STM32_PINMUX('E', 4, AF11)>, /* SDMMC1_D4 */
-					 <STM32_PINMUX('E', 5, AF11)>, /* SDMMC1_D6 */
 					 <STM32_PINMUX('E', 6, AF8)>; /* SDMMC1_D2 */
-			bias-pull-up;
+			bias-disable;
 			drive-push-pull;
 			slew-rate = <1>;
 		};
 		pins2 {
 			u-boot,dm-pre-reloc;
 			pinmux = <STM32_PINMUX('C', 12, AF12)>; /* SDMMC1_CK */
-			bias-pull-up;
+			bias-disable;
 			drive-push-pull;
 			slew-rate = <3>;
 		};
@@ -261,29 +261,25 @@
 		u-boot,dm-pre-reloc;
 		pins1 {
 			u-boot,dm-pre-reloc;
-			pinmux = <STM32_PINMUX('A', 15, AF11)>, /* SDMMC1_D5 */
-					 <STM32_PINMUX('C', 8, AF12)>, /* SDMMC1_D0 */
+			pinmux = <STM32_PINMUX('C', 8, AF12)>, /* SDMMC1_D0 */
 					 <STM32_PINMUX('C', 9, AF12)>, /* SDMMC1_D1 */
 					 <STM32_PINMUX('C', 11, AF12)>, /* SDMMC1_D3 */
-					 <STM32_PINMUX('D', 3, AF11)>, /* SDMMC1_D7 */
-					 <STM32_PINMUX('E', 4, AF11)>, /* SDMMC1_D4 */
-					 <STM32_PINMUX('E', 5, AF11)>, /* SDMMC1_D6 */
 					 <STM32_PINMUX('E', 6, AF8)>; /* SDMMC1_D2 */
-			bias-pull-up;
+			bias-disable;
 			drive-push-pull;
 			slew-rate = <1>;
 		};
 		pins2 {
 			u-boot,dm-pre-reloc;
 			pinmux = <STM32_PINMUX('C', 12, AF12)>; /* SDMMC1_CK */
-			bias-pull-up;
+			bias-disable;
 			drive-push-pull;
 			slew-rate = <3>;
 		};
 		pins3 {
 			u-boot,dm-pre-reloc;
 			pinmux = <STM32_PINMUX('D', 2, AF12)>; /* SDMMC1_CMD */
-			bias-pull-up;
+			bias-disable;
 			drive-open-drain;
 			slew-rate = <1>;
 		};
@@ -293,15 +289,11 @@
 		u-boot,dm-pre-reloc;
 		pins {
 			u-boot,dm-pre-reloc;
-			pinmux = <STM32_PINMUX('A', 15, ANALOG)>, /* SDMMC1_D5 */
-					 <STM32_PINMUX('C', 8, ANALOG)>, /* SDMMC1_D0 */
+			pinmux = <STM32_PINMUX('C', 8, ANALOG)>, /* SDMMC1_D0 */
 					 <STM32_PINMUX('C', 9, ANALOG)>, /* SDMMC1_D1 */
 					 <STM32_PINMUX('C', 11, ANALOG)>, /* SDMMC1_D3 */
 					 <STM32_PINMUX('C', 12, ANALOG)>, /* SDMMC1_CK */
 					 <STM32_PINMUX('D', 2, ANALOG)>, /* SDMMC1_CMD */
-					 <STM32_PINMUX('D', 3, ANALOG)>, /* SDMMC1_D7 */
-					 <STM32_PINMUX('E', 4, ANALOG)>, /* SDMMC1_D4 */
-					 <STM32_PINMUX('E', 5, ANALOG)>, /* SDMMC1_D6 */
 					 <STM32_PINMUX('E', 6, ANALOG)>; /* SDMMC1_D2 */
 		};
 	};
@@ -500,16 +492,6 @@
 	};
 
 	/* USER CODE BEGIN pinctrl */
-
-	pinctrl_edt_ft5x06_mx: pinctrl_edt_ft5x06_mx-0 {
-		pins {
-			pinmux = <STM32_PINMUX('A', 14, GPIO)>;
-			bias-disable;
-			drive-push-pull;
-			slew-rate = <0>;
-		};
-	};
-
 	/* USER CODE END pinctrl */
 };
 
@@ -588,22 +570,8 @@
 		port@1 {
 			reg = <1>;
 			dsi_out: endpoint {
-				remote-endpoint = <&panel_in>;
-			};
-		};
-	};
-
-	panel@0 {
-		compatible = "powertip,ph720128t003-zbc02";
-		reg = <0>;
-		reset-gpios = <&gpioa 1 GPIO_ACTIVE_LOW>;
-		power-supply = <&vdd>;
-		backlight = <&panel_backlight>;
-		status = "okay";
-
-		port {
-			panel_in: endpoint {
-				remote-endpoint = <&dsi_out>;
+				remote-endpoint = <&lt8912_in>;
+				attach-bridge;
 			};
 		};
 	};
@@ -670,16 +638,33 @@
 
 	/* USER CODE BEGIN i2c4 */
 
-	polytouch: edt-ft5x06@38 {
-		compatible = "edt,edt-ft5406", "edt,edt-ft5x06";
-		reg = <0x38>;
-		pinctrl-names = "default";
-		pinctrl-0 = <&pinctrl_edt_ft5x06_mx>;
-		interrupt-parent = <&gpioa>;
-		interrupts = <14 IRQ_TYPE_EDGE_FALLING>;
+	mipi_dsi_hdmi: lt8912@48 {
+		compatible = "lontium,lt8912";
+		reg = <0x48>;
+		ddc-i2c-bus = <&i2c4>;
+		reset-gpios = <&gpioa 1 GPIO_ACTIVE_LOW>;
+		hpd-gpios = <&gpiod 15 GPIO_ACTIVE_HIGH>;
+		swap-mipi-pn;
+		status = "okay";
 
-		touchscreen-size-x = <720>;
-		touchscreen-size-y = <1280>;
+		ports {
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			port@0 {
+				reg = <0>;
+				lt8912_in: endpoint {
+					remote-endpoint = <&dsi_out>;
+				};
+			};
+
+			port@1 {
+				reg = <1>;
+				lt8912_hdmi_out: endpoint {
+					remote-endpoint = <&hdmi_connector_in>;
+				};
+			};
+		};
 	};
 
 	/* USER CODE END i2c4 */
@@ -748,14 +733,10 @@
 
 	/* USER CODE BEGIN sdmmc1 */
 
-	non-removable;
-	no-sd;
-	no-sdio;
+	broken-cd;
 	st,neg-edge;
-	bus-width = <8>;
+	bus-width = <4>;
 	vmmc-supply = <&vdd>;
-	vqmmc-supply = <&vdd>;
-	mmc-ddr-3_3v;
 
 	/* USER CODE END sdmmc1 */
 };
@@ -796,7 +777,7 @@
         #address-cells = <1>;
         #size-cells = <0>;
 	keep-power-in-suspend;
-
+	
 	brcmf: bcrmf@1 {
 		reg = <1>;
 		compatible = "brcm,bcm4329-fmac";
@@ -842,8 +823,8 @@
 
 	/* USER CODE BEGIN uart4 */
 
-	/delete-property/dmas;
-	/delete-property/dma-names;
+        /delete-property/dmas;
+        /delete-property/dma-names;
 
 	/* USER CODE END uart4 */
 };
