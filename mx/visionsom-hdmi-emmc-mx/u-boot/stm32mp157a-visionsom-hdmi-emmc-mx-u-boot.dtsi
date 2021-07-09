@@ -177,5 +177,10 @@
 };
 
 /* USER CODE BEGIN addons */
+
+&ethernet0{
+        st,eth_ref_clk_sel;
+};
+
 /* USER CODE END addons */
 
