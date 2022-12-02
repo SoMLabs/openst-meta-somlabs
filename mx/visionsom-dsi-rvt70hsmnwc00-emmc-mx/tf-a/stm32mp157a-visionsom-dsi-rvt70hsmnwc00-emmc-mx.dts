@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause) */
 /*
- * Copyright (C) STMicroelectronics 2021 - All Rights Reserved
+ * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
  * Author: STM32CubeMX code generation for STMicroelectronics.
  */
 
@@ -27,7 +27,7 @@
 
 / {
 	model = "STMicroelectronics custom STM32CubeMX board";
-	compatible = "st,stm32mp157a-visionsom-dsi-emmc-mx", "st,stm32mp157";
+	compatible = "st,stm32mp157a-visionsom-dsi-rvt70hsmnwc00-emmc-mx", "st,stm32mp157";
 
 	/* USER CODE BEGIN root */
 

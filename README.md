@@ -30,12 +30,13 @@ bitbake st-image-weston
 ```
 
 The following VisionSOM machines are available:
-* stm32mp157a-visionsom-rgb-emmc-mx  Module with eMMC memory and RGB display connected
-* stm32mp157a-visionsom-rgb-sd-mx    Module with SD card and RGB display connected
-* stm32mp157a-visionsom-dsi-emmc-mx  Module with eMMC memory and DSI display connected
-* stm32mp157a-visionsom-dsi-sd-mx    Module with SD card and DSI display connected
-* stm32mp157a-visionsom-hdmi-emmc-mx Module with eMMC memory and DSI/HDMI LT8912 converter connected
-* stm32mp157a-visionsom-hdmi-sd-mx   Module with SD card and DSI/HDMI LT8912 converter connected
+* stm32mp157a-visionsom-rgb-emmc-mx               Module with eMMC memory and RGB display connected
+* stm32mp157a-visionsom-rgb-sd-mx                 Module with SD card and RGB display connected
+* stm32mp157a-visionsom-dsi-ph720128t003-emmc-mx  Module with eMMC memory and ph720128t003 DSI display connected
+* stm32mp157a-visionsom-dsi-rvt70hsmnwc00-emmc-mx Module with eMMC memory and rvt70hsmnwc00 DSI display connected
+* stm32mp157a-visionsom-dsi-sd-mx                 Module with SD card and DSI display connected
+* stm32mp157a-visionsom-hdmi-emmc-mx              Module with eMMC memory and DSI/HDMI LT8912 converter connected
+* stm32mp157a-visionsom-hdmi-sd-mx                Module with SD card and DSI/HDMI LT8912 converter connected
 
 The compiled image files are located in the directory:
 

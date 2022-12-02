@@ -6,7 +6,7 @@ KERNEL_BRANCH = "v5.10-stm32mp-somlabs"
 SRC_URI = "${KERNEL_SRC};branch=${KERNEL_BRANCH} \
            file://stm32mp157a_visionsom_mx_defconfig \
            "
-SRCREV = "7487996f87b91665f0d243d7b96070412def83b9"
+SRCREV = "479483de442687298b5740041610252d3e2ebcce"
 
 S = "${WORKDIR}/git"
 
