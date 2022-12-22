@@ -1,6 +1,7 @@
 inherit populate_sdk_qt5
 
 IMAGE_INSTALL += " \
+    led-udev \
     qtbase-dev \
     qtbase-mkspecs \
     qtbase-tools \
@@ -11,4 +12,5 @@ IMAGE_INSTALL += " \
     gstreamer1.0-plugins-good \
 "
 
-CORE_IMAGE_EXTRA_INSTALL_remove = " packagegroup-st-demo"
+CORE_IMAGE_EXTRA_INSTALL:remove = " packagegroup-st-demo"
+IMAGE_ROOTFS_MAXSIZE = "850000"

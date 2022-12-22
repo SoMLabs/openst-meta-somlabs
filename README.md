@@ -14,34 +14,36 @@ In order to build the system image a Distribution Package provided by STMicroele
 
 https://wiki.st.com/stm32mpu/wiki/STM32MP1_Distribution_Package
 
+Yocto is using absolute directory path to give names to intermediate files. If the path is too long, Yocto build fails because file names exceed the maximum size 
+supported by the file system. In that case, installation directory path should be renamed to reduce the overall absolute path name.
+
 The summary of required steps is shown below:
 
 ```shell
-cd <working directory path>/Distribution-Package
-mkdir openstlinux-5.10-dunfell-mp1-21-03-31
-cd openstlinux-5.10-dunfell-mp1-21-03-31
-repo init -u https://github.com/STMicroelectronics/oe-manifest.git -b refs/tags/openstlinux-5.10-dunfell-mp1-21-03-31
+mkdir st-yocto
+cd st-yocto
+repo init -u https://github.com/STMicroelectronics/oe-manifest.git -b refs/tags/openstlinux-5.15-yocto-kirkstone-mp1-v22.11.23
 repo sync
 cd layers/meta-st
-git clone -b dunfell https://github.com/SoMLabs/openst-meta-somlabs.git meta-somlabs
+git clone -b kirkstone https://github.com/SoMLabs/openst-meta-somlabs.git meta-somlabs
 cd ../../
 DISTRO=openstlinux-weston MACHINE=<MACHINE_NAME> source layers/meta-st/scripts/envsetup.sh
 bitbake st-image-weston
 ```
 
 The following VisionSOM machines are available:
-* stm32mp157a-visionsom-rgb-emmc-mx               Module with eMMC memory and RGB display connected
-* stm32mp157a-visionsom-rgb-sd-mx                 Module with SD card and RGB display connected
-* stm32mp157a-visionsom-dsi-ph720128t003-emmc-mx  Module with eMMC memory and ph720128t003 DSI display connected
-* stm32mp157a-visionsom-dsi-rvt70hsmnwc00-emmc-mx Module with eMMC memory and rvt70hsmnwc00 DSI display connected
-* stm32mp157a-visionsom-dsi-sd-mx                 Module with SD card and DSI display connected
-* stm32mp157a-visionsom-hdmi-emmc-mx              Module with eMMC memory and DSI/HDMI LT8912 converter connected
-* stm32mp157a-visionsom-hdmi-sd-mx                Module with SD card and DSI/HDMI LT8912 converter connected
+* mp157a-dsi-ph-emmc-mx  VisionSOM-STM32MP1 eMMC module with VisionCB-STM32MP1-STD board and ph720128t003 DSI display
+* mp157a-dsi-ph-sd-mx    VisionSOM-STM32MP1 SD-card module with VisionCB-STM32MP1-STD board and ph720128t003 DSI display
+* mp157a-dsi-rvt-emmc-mx VisionSOM-STM32MP1 eMMC module with VisionCB-STM32MP1-STD board and rvt70hsmnwc00 DSI display
+* mp157a-hdmi-lt-emmc-mx VisionSOM-STM32MP1 eMMC module with VisionCB-STM32MP1-STD board and lt8912b HDMI bridge
+* mp157a-hdmi-lt-sd-mx   VisionSOM-STM32MP1 SD-card module with VisionCB-STM32MP1-STD board and lt8912b HDMI bridge
+* mp157a-rgb-ph-emmc-mx  VisionSOM-STM32MP1 eMMC module with VisionCB-STM32MP1-STD board and ph800480t013 RGB display
+* mp157a-rgb-ph-sd-mx    VisionSOM-STM32MP1 SD-card module with VisionCB-STM32MP1-STD board and ph800480t013 RGB display
 
 The compiled image files are located in the directory:
 
 ```
-openstlinux-5.10-dunfell-mp1-21-03-31/build-openstlinuxweston-<MACHINE_NAME>/tmp-glibc/deploy/images/<MACHINE_NAME>
+st-yocto/build-openstlinuxweston-<MACHINE_NAME>/tmp-glibc/deploy/images/<MACHINE_NAME>
 ```
 
 ## Installing SD card image
@@ -49,7 +51,7 @@ openstlinux-5.10-dunfell-mp1-21-03-31/build-openstlinuxweston-<MACHINE_NAME>/tmp
 The SD card image needs to be created using the available script after the building process:
 
 ```
-cd tmp-glibc/deploy/images/<MACHINE_NAME>
+cd tmp-glibc/deploy/images/<MACHINE_NAME>/scripts
 ./create_sdcard_from_flashlayout.sh ../flashlayout_st-image-weston/trusted/FlashLayout_sdcard_<MACHINE_NAME>-trusted.tsv
 ```
 

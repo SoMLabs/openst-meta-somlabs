@@ -1,0 +1,64 @@
+/* SPDX-License-Identifier: GPL-2.0+ OR BSD-3-Clause*/
+/*
+ * Copyright (C) 2022, STMicroelectronics - All Rights Reserved
+ * Author: STM32CubeMX code generation for STMicroelectronics.
+ */
+
+/* For more information on Device Tree configuration, please refer to
+ * https://wiki.st.com/stm32mpu/wiki/Category:Device_tree_configuration
+ */
+
+#include "stm32mp15-u-boot.dtsi"
+
+/* USER CODE BEGIN includes */
+/* USER CODE END includes */
+
+/ {
+
+	/* USER CODE BEGIN root */
+	aliases {
+		serial0 = &uart4;
+		mmc0 = &sdmmc1;
+		mmc1 = &sdmmc2;
+	};
+
+	chosen {
+		stdout-path = "serial0:115200n8";
+	};
+
+        config {
+                u-boot,mmc-env-partition = "fip";
+        };
+
+	/* USER CODE END root */
+
+}; /*root*/
+
+/* USER CODE BEGIN addons */
+
+&ethernet0{
+        st,eth_ref_clk_sel;
+};
+
+&panel_rgb {
+        display-timings {
+                timing@0 {
+                        clock-frequency = <33300000>;
+                        hactive = <800>;
+                        vactive = <480>;
+                        hfront-porch = <210>;
+                        hback-porch = <46>;
+                        hsync-len = <46>;
+                        vback-porch = <23>;
+                        vfront-porch = <22>;
+                        vsync-len = <23>;
+                        hsync-active = <1>;
+                        vsync-active = <1>;
+                        de-active = <1>;
+                        pixelclk-active = <0>;
+                };
+        };
+};
+
+/* USER CODE END addons */
+
