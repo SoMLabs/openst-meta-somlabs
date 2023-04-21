@@ -1,6 +1,6 @@
-/* SPDX-License-Identifier: GPL-2.0+ OR BSD-3-Clause*/
+// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
 /*
- * Copyright (C) 2022, STMicroelectronics - All Rights Reserved
+ * Copyright (C) 2024, STMicroelectronics - All Rights Reserved
  * Author: STM32CubeMX code generation for STMicroelectronics.
  */
 
@@ -8,27 +8,16 @@
  * https://wiki.st.com/stm32mpu/wiki/Category:Device_tree_configuration
  */
 
-#include "stm32mp15-u-boot.dtsi"
-
 /* USER CODE BEGIN includes */
+#include "stm32mp15-scmi-u-boot.dtsi"
 /* USER CODE END includes */
 
 / {
 
 	/* USER CODE BEGIN root */
 
-	aliases {
-		serial0 = &uart4;
-		mmc0 = &sdmmc1;
-		mmc1 = &sdmmc2;
-	};
-
-	chosen {
-		stdout-path = "serial0:115200n8";
-	};
-
 	config {
-		u-boot,mmc-env-partition = "fip";
+		u-boot,mmc-env-partition = "u-boot-env";
 	};
 
 	/* USER CODE END root */
@@ -39,6 +28,22 @@
 
 &ethernet0{
         st,eth_ref_clk_sel;
+};
+
+&uart4 {
+        u-boot,dm-pre-reloc;
+};
+
+&uart4_pins_a {
+        u-boot,dm-pre-reloc;
+        pins1 {
+                u-boot,dm-pre-reloc;
+        };
+        pins2 {
+                u-boot,dm-pre-reloc;
+                /* pull-up on rx to avoid floating level */
+                bias-pull-up;
+        };
 };
 
 /* USER CODE END addons */

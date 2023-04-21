@@ -9,8 +9,11 @@ include conf/machine/include/st-machine-providers-stm32mp.inc
 
 # Define specific common machine name
 MACHINEOVERRIDES .= ":stm32mpcommonmx:stm32mp15commonmx"
-MACHINEOVERRIDES .= ":stm32mp1common:stm32mp15common"
+MACHINEOVERRIDES .= ":stm32mp1common:stm32mp15common:"
 MACHINEOVERRIDES .= ":stm32mpvisionsommx"
+MACHINEOVERRIDES .= ":stm32mpsomlabscommon"
+
+DEVICE_STORAGE:stm32mpsomlabscommon = "EMMC:mmc0, NAND:nand0, NOR:nor0, SDCARD:mmc1, SPINAND:spi-nand0"
 
 # =========================================================================
 # Chip architecture
@@ -26,12 +29,16 @@ BOOTSCHEME_LABELS ?= ""
 # =========================================================================
 # boot device
 # =========================================================================
-BOOTDEVICE_LABELS ?= ""
+BOOTDEVICE_LABELS = "emmc"
 
 # =========================================================================
 # Machine settings
 # =========================================================================
-STM32MP_DEVICETREE = "${CUBEMX_DTB}"
+STM32MP_DT_FILES_NAND    += "${CUBEMX_DTB}"
+STM32MP_DT_FILES_NOR     += "${CUBEMX_DTB}"
+STM32MP_DT_FILES_EMMC    += "${CUBEMX_DTB}"
+STM32MP_DT_FILES_SDCARD  += "${CUBEMX_DTB}"
+STM32MP_DT_FILES_SPINAND += "${CUBEMX_DTB}"
 
 # =========================================================================
 # Machine features (default for stm32mp1 like)
@@ -42,26 +49,9 @@ MACHINE_FEATURES += "${@'gpu' if d.getVar('ACCEPT_EULA_'+d.getVar('MACHINE')) ==
 MACHINE_FEATURES += "m4copro"
 
 # =========================================================================
-# Device Storage
-# =========================================================================
-# Enable the board device storage support with CUBEMX_DTB according to BOOTDEVICE_LABELS
-DEVICE_BOARD_ENABLE:NAND    += "${@bb.utils.contains('BOOTDEVICE_LABELS', 'nand-4-256', '${CUBEMX_DTB}', '', d)}"
-DEVICE_BOARD_ENABLE:NOR     += "${@bb.utils.contains('BOOTDEVICE_LABELS', 'nor-sdcard' , '${CUBEMX_DTB}', '', d)}"
-DEVICE_BOARD_ENABLE:EMMC    += "${@bb.utils.contains('BOOTDEVICE_LABELS', 'emmc', '${CUBEMX_DTB}', '', d)}"
-DEVICE_BOARD_ENABLE:SDCARD  += "${@bb.utils.contains('BOOTDEVICE_LABELS', 'sdcard', '${CUBEMX_DTB}', '', d)}"
-
-# =========================================================================
 # Flashlayout
 # =========================================================================
-# Set the FLASHLAYOUT_TYPE_LABELS to CUBEMX_DTB according to BOOTDEVICE_LABELS
-FLASHLAYOUT_TYPE_LABELS:emmc        = "${@bb.utils.contains('BOOTDEVICE_LABELS', 'emmc', '${CUBEMX_DTB}', '', d)}"
-FLASHLAYOUT_TYPE_LABELS:nand-4-256  = "${@bb.utils.contains('BOOTDEVICE_LABELS', 'nand-4-256', '${CUBEMX_DTB}', '', d)}"
-FLASHLAYOUT_TYPE_LABELS:nor-sdcard  = "${@bb.utils.contains('BOOTDEVICE_LABELS', 'nor-sdcard' , '${CUBEMX_DTB}', '', d)}"
-FLASHLAYOUT_TYPE_LABELS:sdcard      = "${@bb.utils.contains('BOOTDEVICE_LABELS', 'sdcard', '${CUBEMX_DTB}', '', d)}"
-
-# Specific settings for 'extensible' and 'deleteall' configurations
-FLASHLAYOUT_CONFIG_LABELS:deleteall = "cubemx"
-FLASHLAYOUT_TYPE_LABELS:deleteall:cubemx = "${CUBEMX_DTB}"
+# Set the FLASHLAYOUT_TYPE_LABELS for 'extensible' to CUBEMX_DTB
 FLASHLAYOUT_TYPE_LABELS:extensible = "${CUBEMX_DTB}"
 
 # =========================================================================
@@ -78,7 +68,7 @@ ENABLE_CUBEMX_DTB ?= "1"
 UBOOT_EXTLINUX_SPLASH = "${@'${UBOOT_SPLASH_LANDSCAPE_IMAGE}' if d.getVar('DISPLAY_ORIENTATION') == 'landscape' \
                            else '${UBOOT_SPLASH_PORTRAIT_IMAGE}'}"
 
-BOOTSCHEME_LABELS += "trusted"
+BOOTSCHEME_LABELS += "optee"
 
 # Bootloader config file
 UBOOT_CONFIG[trusted_stm32mp15] = "stm32mp15_visionsom_trusted_defconfig,,u-boot.dtb"
