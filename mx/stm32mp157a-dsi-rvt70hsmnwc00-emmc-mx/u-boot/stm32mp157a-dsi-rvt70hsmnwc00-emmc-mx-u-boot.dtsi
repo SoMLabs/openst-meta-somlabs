@@ -1,33 +1,15 @@
-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 /*
- * Copyright (C) 2024, STMicroelectronics - All Rights Reserved
- * Author: STM32CubeMX code generation for STMicroelectronics.
+ * Copyright 2024 SoMLabs
  */
 
-/* For more information on Device Tree configuration, please refer to
- * https://wiki.st.com/stm32mpu/wiki/Category:Device_tree_configuration
- */
-
-/* USER CODE BEGIN includes */
 #include "stm32mp15-scmi-u-boot.dtsi"
-/* USER CODE END includes */
 
 / {
-
-	/* USER CODE BEGIN root */
-
 	config {
 		u-boot,mmc-env-partition = "u-boot-env";
 	};
 
-	/* USER CODE END root */
-
-}; /*root*/
-
-/* USER CODE BEGIN addons */
-
-&ethernet0{
-        st,eth_ref_clk_sel;
 };
 
 &uart4 {
@@ -41,10 +23,7 @@
         };
         pins2 {
                 u-boot,dm-pre-reloc;
-                /* pull-up on rx to avoid floating level */
                 bias-pull-up;
         };
 };
-
-/* USER CODE END addons */
 

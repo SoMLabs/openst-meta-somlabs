@@ -1,7 +1,6 @@
-// SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-3-Clause)
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 /*
- * Copyright (C) STMicroelectronics 2022 - All Rights Reserved
- * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
+ * Copyright 2024 SoMLabs
  */
 
 #include "stm32mp15-scmi.dtsi"

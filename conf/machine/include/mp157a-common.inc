@@ -81,7 +81,7 @@ MACHINE_FEATURES += "wifi"
 #KERNEL_MODULE_AUTOLOAD += ""
 
 # Set Bluetooth related package list needed when 'bluetooth' feature is enabled
-BLUETOOTH_LIST += "linux-firmware-bluetooth-bcm4343"
+BLUETOOTH_LIST += "linux-firmware-bluetooth-bcm43xx"
 
 # Set Wifi related package list needed when 'wifi' feature is enabled
 WIFI_LIST += "linux-firmware-bcm43430"
